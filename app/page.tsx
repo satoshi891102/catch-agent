@@ -1,8 +1,4 @@
-'use client'
-
-import { useRef } from 'react'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
 import {
   Shield,
   Lock,
@@ -19,539 +15,443 @@ import {
   Search,
   Brain,
   Zap,
+  X,
 } from 'lucide-react'
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: 'easeOut' },
-}
-
-const stagger = {
-  animate: { transition: { staggerChildren: 0.1 } },
-}
-
-function AnimatedSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0f0e0c] overflow-x-hidden">
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 py-4 bg-[#0f0e0c]/90 backdrop-blur-md border-b border-[#2e2b25]/40">
-        <div className="flex items-center gap-2">
-          <Eye className="w-5 h-5 text-[#c9a84c]" />
-          <span className="font-semibold text-[#f0ebe0] tracking-wide">VIGIL</span>
+    <div className="min-h-screen grain-overlay">
+      {/* ═══ NAV ═══ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 py-4 bg-[var(--bg-primary)]/90 backdrop-blur-xl border-b border-[var(--border-subtle)]">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/30 flex items-center justify-center">
+            <Eye className="w-3.5 h-3.5 text-[var(--vigil-gold)]" />
+          </div>
+          <span className="font-semibold text-[var(--text-primary)] tracking-[0.15em] text-sm">VIGIL</span>
         </div>
         <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="text-sm text-[#b8a98a] hover:text-[#f0ebe0] transition-colors px-3 py-1.5"
-          >
+          <Link href="/login" className="btn-ghost text-sm px-3 py-1.5">
             Sign in
           </Link>
-          <Link
-            href="/signup"
-            className="text-sm bg-[#c9a84c] text-[#0f0e0c] px-4 py-1.5 rounded-full font-medium hover:bg-[#e0c070] transition-colors"
-          >
+          <Link href="/signup" className="btn-gold text-sm px-5 py-2">
             Start free
           </Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="hero-gradient min-h-screen flex flex-col items-center justify-center px-5 pt-20 pb-16 text-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl mx-auto"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 text-[#c9a84c] text-xs font-medium tracking-widest uppercase mb-6 px-3 py-1.5 border border-[#c9a84c]/30 rounded-full bg-[#c9a84c]/5"
-          >
-            <Shield className="w-3 h-3" />
-            Private. Secure. Zero judgment.
-          </motion.div>
+      {/* ═══ HERO ═══ */}
+      <section className="hero-bg min-h-screen flex flex-col items-center justify-center px-5 pt-24 pb-20 text-center relative">
+        <div className="max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 text-[var(--vigil-gold)] text-xs font-medium tracking-[0.2em] uppercase mb-8 px-4 py-2 border border-[var(--vigil-gold)]/25 rounded-full bg-[var(--vigil-gold)]/5">
+            <Shield className="w-3.5 h-3.5" />
+            Private · Secure · Zero judgment
+          </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#f0ebe0] leading-tight mb-6"
-          >
-            You know something{' '}
-            <span className="text-gradient-gold">isn&apos;t right.</span>
-          </motion.h1>
+          <h1 className="text-[clamp(2.5rem,6vw,4rem)] font-bold text-[var(--text-primary)] leading-[1.1] mb-6 tracking-tight">
+            You know something<br />
+            <span className="text-gold-gradient">isn&apos;t right.</span>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-lg sm:text-xl text-[#b8a98a] leading-relaxed mb-8 max-w-xl mx-auto"
-          >
+          <p className="text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed mb-10 max-w-lg mx-auto">
             Vigil is an AI relationship investigator that helps you find the truth — methodically, legally, and without anyone else knowing.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12"
-          >
-            <Link
-              href="/signup"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#c9a84c] text-[#0f0e0c] px-8 py-4 rounded-full font-semibold text-base hover:bg-[#e0c070] transition-all hover:shadow-[0_0_30px_rgba(201,168,76,0.3)] active:scale-95"
-            >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+            <Link href="/signup" className="btn-gold flex items-center gap-2 px-8 py-4 text-base w-full sm:w-auto justify-center">
               Start your investigation
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              href="#how-it-works"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 text-[#b8a98a] hover:text-[#f0ebe0] px-6 py-4 transition-colors"
-            >
+            <Link href="#how-it-works" className="btn-ghost flex items-center gap-2 px-6 py-4 w-full sm:w-auto justify-center">
               See how it works
               <ChevronDown className="w-4 h-4" />
             </Link>
-          </motion.div>
+          </div>
 
-          {/* Trust indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[#6e6050]"
-          >
-            <span className="flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-[#c9a84c]" />
-              Free to start
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-[#c9a84c]" />
-              No credit card required
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-[#c9a84c]" />
-              Available 24/7
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-[#c9a84c]" />
-              100% private
-            </span>
-          </motion.div>
-        </motion.div>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-[var(--text-muted)]">
+            {['Free to start', 'No credit card', 'Available 24/7', '100% private'].map((item) => (
+              <span key={item} className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-[var(--vigil-gold)]/70" />
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          >
-            <ChevronDown className="w-5 h-5 text-[#6e6050]" />
-          </motion.div>
-        </motion.div>
+        {/* Decorative bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--bg-elevated)] to-transparent" />
       </section>
 
-      {/* The Problem — emotional resonance */}
-      <section className="px-5 py-20 bg-[#0a0908]">
-        <AnimatedSection className="max-w-2xl mx-auto text-center">
-          <p className="text-2xl sm:text-3xl font-light text-[#f0ebe0] leading-relaxed">
+      {/* ═══ THE PROBLEM — Emotional Resonance ═══ */}
+      <section className="section-elevated px-5 py-24">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-[clamp(1.25rem,3vw,1.75rem)] font-light text-[var(--text-primary)] leading-relaxed italic" style={{ fontFamily: 'var(--font-display)' }}>
             &ldquo;It&apos;s 2am. You can&apos;t sleep. Something feels off, but you can&apos;t prove it. You don&apos;t know who to talk to — you don&apos;t want to worry your friends, you can&apos;t afford a PI, and Google just makes it worse.&rdquo;
           </p>
-          <p className="mt-6 text-[#b8a98a] text-lg">
+          <div className="mt-8 w-12 h-px bg-[var(--vigil-gold)]/40 mx-auto" />
+          <p className="mt-6 text-[var(--vigil-gold)] font-medium text-base">
             That&apos;s exactly why Vigil exists.
           </p>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* The Gap table */}
-      <section className="px-5 py-16 bg-[#0f0e0c]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-10">
+      {/* ═══ WHY NOTHING ELSE WORKS ═══ */}
+      <section className="section-dark px-5 py-24">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-4">
             Why nothing else works
           </h2>
+          <p className="text-center text-[var(--text-secondary)] mb-12 text-sm">
+            Every option has a fatal flaw. Vigil was built to fill the gap.
+          </p>
           <div className="space-y-3">
             {[
               { option: 'Private investigator', problem: '$2,000–5,000. Weeks of waiting. Embarrassing to hire.' },
               { option: 'Spy apps', problem: 'Illegal. Require physical access. Ethically wrong.' },
-              { option: 'Friends & family', problem: 'Biased. Gossip risk. Can&apos;t give objective advice.' },
+              { option: 'Friends & family', problem: 'Biased. Gossip risk. Can\'t give objective advice.' },
               { option: 'Therapy', problem: '$200/session. Scheduled appointments. Not available at 2am.' },
               { option: 'Google & Reddit', problem: 'Generic. Contradictory. No memory of your situation.' },
               { option: 'ChatGPT', problem: 'No structure. No case file. No methodology. Forgotten tomorrow.' },
             ].map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="flex items-start gap-4 p-4 bg-[#1a1814] rounded-xl border border-[#2e2b25]"
+                className="flex items-start gap-4 p-4 vigil-card"
               >
-                <AlertCircle className="w-4 h-4 text-red-400/60 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-medium text-[#f0ebe0] text-sm">{item.option}</span>
-                  <span className="text-[#6e6050] text-sm"> — </span>
-                  <span className="text-[#b8a98a] text-sm" dangerouslySetInnerHTML={{ __html: item.problem }} />
+                <div className="w-6 h-6 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mt-0.5 shrink-0">
+                  <X className="w-3 h-3 text-red-400/80" />
                 </div>
-              </motion.div>
+                <div>
+                  <span className="font-medium text-[var(--text-primary)] text-sm">{item.option}</span>
+                  <span className="text-[var(--text-muted)] text-sm"> — </span>
+                  <span className="text-[var(--text-secondary)] text-sm">{item.problem}</span>
+                </div>
+              </div>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="px-5 py-20 bg-[#0a0908]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-3">
+      {/* ═══ HOW IT WORKS ═══ */}
+      <section id="how-it-works" className="section-elevated px-5 py-24">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-3">
             How Vigil works
           </h2>
-          <p className="text-center text-[#b8a98a] mb-12">
+          <p className="text-center text-[var(--text-secondary)] mb-14 text-sm">
             A structured, methodical approach. Not random advice.
           </p>
-          <div className="space-y-6">
+
+          <div className="space-y-0 relative">
+            {/* Vertical connector line */}
+            <div className="absolute left-[23px] top-[40px] bottom-[40px] w-px bg-gradient-to-b from-[var(--vigil-gold)]/30 via-[var(--vigil-gold)]/15 to-[var(--vigil-gold)]/30 hidden sm:block" />
+
             {[
               {
                 step: '01',
                 icon: <MessageSquare className="w-5 h-5" />,
                 title: 'Tell your story',
-                description: 'Start by describing what you\'ve noticed. Vigil listens without judgment, asks the right questions, and builds your personal case file.',
+                desc: 'Start by describing what you\'ve noticed. Vigil listens without judgment, asks the right questions, and builds your personal case file.',
               },
               {
                 step: '02',
                 icon: <Search className="w-5 h-5" />,
                 title: 'Guided investigation',
-                description: 'Vigil walks you through 5 investigation modules — digital behavior, schedule patterns, financial red flags, communication changes, and emotional shifts.',
+                desc: 'Vigil walks you through 5 investigation modules — digital behavior, schedule patterns, financial red flags, communication changes, and emotional shifts.',
               },
               {
                 step: '03',
                 icon: <Brain className="w-5 h-5" />,
                 title: 'Pattern analysis',
-                description: 'As you gather information, Vigil connects the dots. A single thing can be innocent. Patterns are different.',
+                desc: 'As you gather information, Vigil connects the dots. A single thing can be innocent. Patterns tell the real story.',
               },
               {
                 step: '04',
                 icon: <FileText className="w-5 h-5" />,
                 title: 'The confrontation toolkit',
-                description: 'When you\'re ready, Vigil prepares you — what to say, what not to say, how to handle denial, and what to do with the answer.',
+                desc: 'When you\'re ready, Vigil prepares you — what to say, what not to say, how to handle denial, and what to do with the answer.',
               },
             ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex gap-5 p-5 bg-[#1e1c18] rounded-2xl border border-[#2e2b25]"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 flex items-center justify-center text-[#c9a84c]">
+              <div key={i} className="flex gap-5 p-5 sm:p-6 relative">
+                <div className="flex flex-col items-center gap-2 shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/25 flex items-center justify-center text-[var(--vigil-gold)] relative z-10">
                     {item.icon}
                   </div>
-                  <span className="text-xs text-[#6e6050] font-mono">{item.step}</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono tracking-wider">{item.step}</span>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-[#f0ebe0] mb-1">{item.title}</h3>
-                  <p className="text-sm text-[#b8a98a] leading-relaxed">{item.description}</p>
+                <div className="flex-1 pt-1">
+                  <h3 className="font-semibold text-[var(--text-primary)] mb-2 text-base">{item.title}</h3>
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Chat preview */}
-      <section className="px-5 py-20 bg-[#0f0e0c]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-3">
+      {/* ═══ CHAT PREVIEW ═══ */}
+      <section className="section-dark px-5 py-24">
+        <div className="max-w-xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-3">
             Feel what it&apos;s like
           </h2>
-          <p className="text-center text-[#b8a98a] mb-10">
+          <p className="text-center text-[var(--text-secondary)] mb-10 text-sm">
             This is how Vigil talks to you.
           </p>
-          <div className="bg-[#1a1814] rounded-2xl border border-[#2e2b25] overflow-hidden">
+
+          <div className="rounded-2xl border border-[var(--border-default)] overflow-hidden bg-[var(--bg-card)] shadow-[0_4px_40px_rgba(0,0,0,0.4)]">
             {/* Chat header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-[#2e2b25] bg-[#1e1c18]">
-              <div className="w-8 h-8 rounded-full bg-[#c9a84c]/15 border border-[#c9a84c]/30 flex items-center justify-center">
-                <Eye className="w-4 h-4 text-[#c9a84c]" />
+            <div className="flex items-center gap-3 px-5 py-3.5 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
+              <div className="w-9 h-9 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center">
+                <Eye className="w-4 h-4 text-[var(--vigil-gold)]" />
               </div>
               <div>
-                <div className="text-sm font-medium text-[#f0ebe0]">Vigil</div>
-                <div className="text-xs text-[#4ade80] flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] inline-block" />
+                <div className="text-sm font-medium text-[var(--text-primary)]">Vigil</div>
+                <div className="text-xs text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
                   Active
                 </div>
               </div>
             </div>
+
             {/* Messages */}
-            <div className="p-4 space-y-4">
+            <div className="p-5 space-y-4">
+              {/* Vigil message */}
               <div className="flex gap-3 items-end">
-                <div className="w-6 h-6 rounded-full bg-[#c9a84c]/15 border border-[#c9a84c]/30 flex items-center justify-center shrink-0">
-                  <Eye className="w-3 h-3 text-[#c9a84c]" />
+                <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center shrink-0">
+                  <Eye className="w-3 h-3 text-[var(--vigil-gold)]" />
                 </div>
-                <div className="bg-[#272420] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
-                  <p className="text-sm text-[#f0ebe0] leading-relaxed">
+                <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-bl-sm px-4 py-3 max-w-[80%] border border-[var(--border-subtle)]">
+                  <p className="text-sm text-[var(--text-primary)] leading-relaxed">
                     I&apos;m here, and I&apos;m listening. Tell me everything from the beginning — what first made you suspicious? Don&apos;t filter yourself.
                   </p>
                 </div>
               </div>
+
+              {/* User message */}
               <div className="flex gap-3 items-end justify-end">
-                <div className="bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs">
-                  <p className="text-sm text-[#f0ebe0] leading-relaxed">
+                <div className="bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/20 rounded-2xl rounded-br-sm px-4 py-3 max-w-[80%]">
+                  <p className="text-sm text-[var(--text-primary)] leading-relaxed">
                     He started coming home late about 3 weeks ago. Always &quot;meetings&quot; but he never used to work late. And he changed his phone password.
                   </p>
                 </div>
               </div>
+
+              {/* Vigil response */}
               <div className="flex gap-3 items-end">
-                <div className="w-6 h-6 rounded-full bg-[#c9a84c]/15 border border-[#c9a84c]/30 flex items-center justify-center shrink-0">
-                  <Eye className="w-3 h-3 text-[#c9a84c]" />
+                <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center shrink-0">
+                  <Eye className="w-3 h-3 text-[var(--vigil-gold)]" />
                 </div>
-                <div className="bg-[#272420] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
-                  <p className="text-sm text-[#f0ebe0] leading-relaxed">
-                    Three weeks ago — that&apos;s a specific starting point, which matters. The phone password change is worth noting. What changed about the late nights — is it a specific day, or random?
+                <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-bl-sm px-4 py-3 max-w-[80%] border border-[var(--border-subtle)]">
+                  <p className="text-sm text-[var(--text-primary)] leading-relaxed">
+                    Three weeks ago — that&apos;s a specific starting point, which matters. The phone password change alongside late nights is a notable combination. Let me ask: is it the <em className="text-[var(--vigil-gold)]">same nights</em> each week, or unpredictable?
                   </p>
                 </div>
               </div>
             </div>
-            <div className="px-4 py-3 border-t border-[#2e2b25] flex items-center gap-3">
-              <div className="flex-1 bg-[#0f0e0c] rounded-full px-4 py-2.5 text-sm text-[#6e6050]">
+
+            {/* Input bar */}
+            <div className="px-5 py-4 border-t border-[var(--border-subtle)] flex items-center gap-3 bg-[var(--bg-elevated)]">
+              <div className="flex-1 bg-[var(--bg-primary)] rounded-full px-4 py-2.5 text-sm text-[var(--text-muted)] border border-[var(--border-subtle)]">
                 Tell Vigil what you&apos;ve noticed...
               </div>
-              <Link
-                href="/signup"
-                className="bg-[#c9a84c] text-[#0f0e0c] px-4 py-2.5 rounded-full text-sm font-medium hover:bg-[#e0c070] transition-colors"
-              >
-                Start for free
+              <Link href="/signup" className="btn-gold px-5 py-2.5 text-sm">
+                Try free
               </Link>
             </div>
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Features */}
-      <section className="px-5 py-20 bg-[#0a0908]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-3">
+      {/* ═══ FEATURES ═══ */}
+      <section className="section-elevated px-5 py-24">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-3">
             What you get
           </h2>
-          <p className="text-center text-[#b8a98a] mb-12">
+          <p className="text-center text-[var(--text-secondary)] mb-14 text-sm">
             Everything a private investigator knows, at a fraction of the cost.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
-                icon: <FileText className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <FileText className="w-5 h-5" />,
                 title: 'Persistent Case File',
-                description: 'Every detail you share is remembered and organized. Vigil never forgets.',
+                desc: 'Every detail you share is remembered and organized. Vigil never forgets.',
               },
               {
-                icon: <Clock className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <Clock className="w-5 h-5" />,
                 title: '24/7 Availability',
-                description: 'Available at 2am when the anxiety peaks and you can\'t sleep.',
+                desc: 'Available at 2am when the anxiety peaks and you can\'t sleep.',
               },
               {
-                icon: <TrendingUp className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <TrendingUp className="w-5 h-5" />,
                 title: 'Pattern Analysis',
-                description: 'Connects dots across digital, schedule, financial, and behavioral evidence.',
+                desc: 'Connects dots across digital, schedule, financial, and behavioral evidence.',
               },
               {
-                icon: <Shield className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <Shield className="w-5 h-5" />,
                 title: 'Legal Methods Only',
-                description: 'Every technique is legal. Vigil will never advise accessing someone\'s accounts.',
+                desc: 'Every technique is legal. Vigil will never advise accessing someone\'s accounts.',
               },
               {
-                icon: <Lock className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <Lock className="w-5 h-5" />,
                 title: 'Complete Privacy',
-                description: 'No real name needed. End-to-end private. No one ever knows you\'re here.',
+                desc: 'No real name needed. End-to-end private. No one ever knows you\'re here.',
               },
               {
-                icon: <Zap className="w-5 h-5 text-[#c9a84c]" />,
+                icon: <Zap className="w-5 h-5" />,
                 title: 'Confrontation Ready',
-                description: 'When you have enough, Vigil prepares you for the conversation.',
+                desc: 'When you have enough, Vigil prepares you for the conversation.',
               },
             ].map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="p-5 bg-[#1e1c18] rounded-2xl border border-[#2e2b25] hover:border-[#c9a84c]/20 transition-colors"
-              >
-                <div className="w-9 h-9 rounded-xl bg-[#c9a84c]/10 flex items-center justify-center mb-3">
+              <div key={i} className="vigil-card p-6">
+                <div className="w-10 h-10 rounded-xl bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/20 flex items-center justify-center mb-4 text-[var(--vigil-gold)]">
                   {feature.icon}
                 </div>
-                <h3 className="font-semibold text-[#f0ebe0] mb-1.5 text-sm">{feature.title}</h3>
-                <p className="text-sm text-[#b8a98a] leading-relaxed">{feature.description}</p>
-              </motion.div>
+                <h3 className="font-semibold text-[var(--text-primary)] mb-2 text-[15px]">{feature.title}</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{feature.desc}</p>
+              </div>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Pricing */}
-      <section className="px-5 py-20 bg-[#0f0e0c]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-2">
+      {/* ═══ PRICING ═══ */}
+      <section className="section-dark px-5 py-24">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-2">
             Simple pricing
           </h2>
-          <p className="text-center text-[#b8a98a] mb-10">
+          <p className="text-center text-[var(--text-secondary)] mb-12 text-sm">
             A fraction of a private investigator. Cancel anytime.
           </p>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                name: 'Weekly',
-                price: '$9.99',
-                period: '/week',
-                badge: 'Start now',
-                features: ['Unlimited conversations', 'All 5 investigation modules', 'Pattern analysis', 'Evidence tracking'],
-              },
-              {
-                name: 'Monthly',
-                price: '$29.99',
-                period: '/month',
-                badge: 'Best value',
-                highlighted: true,
-                features: ['Everything in Weekly', 'Confrontation toolkit', 'Legal prep guide', 'Exit planning'],
-              },
-              {
-                name: 'Confrontation',
-                price: '$49.99',
-                period: 'one-time',
-                badge: 'Ready to act',
-                features: ['Complete scripts', 'Recording laws guide', 'Legal prep', 'Lifetime access'],
-              },
-            ].map((plan, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className={`relative p-5 rounded-2xl border flex flex-col ${
-                  plan.highlighted
-                    ? 'bg-[#c9a84c]/8 border-[#c9a84c]/40 shadow-[0_0_30px_rgba(201,168,76,0.1)]'
-                    : 'bg-[#1e1c18] border-[#2e2b25]'
-                }`}
-              >
-                {plan.highlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c9a84c] text-[#0f0e0c] text-xs font-semibold px-3 py-1 rounded-full">
-                    Most Popular
-                  </div>
-                )}
-                <div className="mb-4">
-                  <span className="text-xs text-[#c9a84c] font-medium uppercase tracking-wide">{plan.badge}</span>
-                  <div className="text-xl font-bold text-[#f0ebe0] mt-1">
-                    {plan.price}
-                    <span className="text-sm font-normal text-[#b8a98a]">{plan.period}</span>
-                  </div>
-                  <div className="text-sm font-medium text-[#b8a98a]">{plan.name}</div>
-                </div>
-                <ul className="space-y-2 mb-5 flex-1">
-                  {plan.features.map((f, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-[#b8a98a]">
-                      <CheckCircle className="w-3.5 h-3.5 text-[#c9a84c] mt-0.5 shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/signup"
-                  className={`text-center py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    plan.highlighted
-                      ? 'bg-[#c9a84c] text-[#0f0e0c] hover:bg-[#e0c070]'
-                      : 'bg-[#272420] text-[#f0ebe0] hover:bg-[#2e2b25] border border-[#3e3830]'
-                  }`}
-                >
-                  Get started
-                </Link>
-              </motion.div>
-            ))}
+            {/* Weekly */}
+            <div className="vigil-card p-6 flex flex-col">
+              <span className="text-xs text-[var(--vigil-gold)] font-medium uppercase tracking-wider">Start now</span>
+              <div className="mt-2 mb-1">
+                <span className="text-3xl font-bold text-[var(--text-primary)]">$9.99</span>
+                <span className="text-sm text-[var(--text-secondary)]">/week</span>
+              </div>
+              <span className="text-sm text-[var(--text-muted)] mb-5">Weekly</span>
+              <ul className="space-y-2.5 mb-6 flex-1">
+                {['Unlimited conversations', 'All 5 investigation modules', 'Pattern analysis', 'Evidence tracking'].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                    <CheckCircle className="w-3.5 h-3.5 text-[var(--vigil-gold)]/70 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/signup" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
+                Get started
+              </Link>
+            </div>
+
+            {/* Monthly — highlighted */}
+            <div className="relative p-6 rounded-2xl flex flex-col bg-[var(--vigil-gold)]/[0.06] border-2 border-[var(--vigil-gold)]/40 shadow-[0_0_40px_rgba(201,168,76,0.08)]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--vigil-gold)] text-[var(--bg-primary)] text-xs font-bold px-4 py-1 rounded-full tracking-wide">
+                MOST POPULAR
+              </div>
+              <span className="text-xs text-[var(--vigil-gold)] font-medium uppercase tracking-wider">Best value</span>
+              <div className="mt-2 mb-1">
+                <span className="text-3xl font-bold text-[var(--text-primary)]">$29.99</span>
+                <span className="text-sm text-[var(--text-secondary)]">/month</span>
+              </div>
+              <span className="text-sm text-[var(--text-muted)] mb-5">Monthly</span>
+              <ul className="space-y-2.5 mb-6 flex-1">
+                {['Everything in Weekly', 'Confrontation toolkit', 'Legal prep guide', 'Exit planning'].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                    <CheckCircle className="w-3.5 h-3.5 text-[var(--vigil-gold)] mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/signup" className="btn-gold text-center py-3 text-sm">
+                Get started
+              </Link>
+            </div>
+
+            {/* Confrontation */}
+            <div className="vigil-card p-6 flex flex-col">
+              <span className="text-xs text-[var(--vigil-gold)] font-medium uppercase tracking-wider">Ready to act</span>
+              <div className="mt-2 mb-1">
+                <span className="text-3xl font-bold text-[var(--text-primary)]">$49.99</span>
+                <span className="text-sm text-[var(--text-secondary)]"> one-time</span>
+              </div>
+              <span className="text-sm text-[var(--text-muted)] mb-5">Confrontation</span>
+              <ul className="space-y-2.5 mb-6 flex-1">
+                {['Complete scripts', 'Recording laws guide', 'Legal prep', 'Lifetime access'].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                    <CheckCircle className="w-3.5 h-3.5 text-[var(--vigil-gold)]/70 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/signup" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
+                Get started
+              </Link>
+            </div>
           </div>
-          <p className="text-center text-xs text-[#6e6050] mt-6">
-            Start free — 10 messages included with no credit card. Upgrade when you&apos;re ready.
+
+          <p className="text-center text-xs text-[var(--text-muted)] mt-8">
+            Start free — 10 messages included. No credit card required. Upgrade when ready.
           </p>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="px-5 py-20 bg-[#0a0908]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-10">
+      {/* ═══ TESTIMONIALS ═══ */}
+      <section className="section-elevated px-5 py-24">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-12">
             From people who found their answers
           </h2>
           <div className="space-y-4">
             {[
               {
                 text: 'I was spiraling at midnight with no one to talk to. Vigil helped me organize my thoughts and realize I actually had three patterns of evidence I\'d dismissed individually. Within a week, I had my answer.',
-                author: 'Anonymous — used Vigil for 2 weeks',
+                author: 'Anonymous — 2 weeks',
               },
               {
                 text: 'I was genuinely afraid I was being paranoid. Vigil told me honestly that most of what I\'d found was explainable. That clarity alone was worth the $10.',
-                author: 'Anonymous — used Vigil for 3 days',
+                author: 'Anonymous — 3 days',
               },
               {
                 text: 'The confrontation prep was everything. I knew exactly what to say, how to handle denial, and what to do after. I wasn\'t blindsided by anything.',
-                author: 'Anonymous — used Vigil for 6 weeks',
+                author: 'Anonymous — 6 weeks',
               },
             ].map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="p-5 bg-[#1e1c18] rounded-2xl border border-[#2e2b25]"
-              >
-                <div className="flex gap-1 mb-3">
+              <div key={i} className="vigil-card p-6">
+                <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 text-[#c9a84c] fill-[#c9a84c]" />
+                    <Star key={j} className="w-4 h-4 text-[var(--vigil-gold)] fill-[var(--vigil-gold)]" />
                   ))}
                 </div>
-                <p className="text-[#b8a98a] text-sm leading-relaxed mb-3">&ldquo;{t.text}&rdquo;</p>
-                <p className="text-xs text-[#6e6050]">{t.author}</p>
-              </motion.div>
+                <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">
+                  &ldquo;{t.text}&rdquo;
+                </p>
+                <p className="text-xs text-[var(--text-muted)] font-medium">{t.author}</p>
+              </div>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* FAQ */}
-      <section className="px-5 py-20 bg-[#0f0e0c]">
-        <AnimatedSection className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#f0ebe0] mb-10">
+      {/* ═══ FAQ ═══ */}
+      <section className="section-dark px-5 py-24">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--text-primary)] mb-12">
             Common questions
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {[
               {
                 q: 'Is this legal?',
-                a: 'Yes. Vigil only guides you through legal evidence-gathering methods. It will never advise accessing someone\'s phone, accounts, or installing spy software. All guidance is ethical and legal.',
+                a: 'Yes. Vigil only guides you through legal evidence-gathering methods. It will never advise accessing someone\'s phone, accounts, or installing spy software.',
               },
               {
                 q: 'Who can see my conversations?',
-                a: 'No one. Your conversations are private and encrypted. We don\'t read them, we don\'t share them, and we never will. You can also delete your account and all data at any time.',
+                a: 'No one. Your conversations are private and encrypted. We don\'t read them, share them, or sell them. Delete your account and all data at any time.',
               },
               {
                 q: 'Do I need to use my real name?',
@@ -563,95 +463,87 @@ export default function LandingPage() {
               },
               {
                 q: 'Can I cancel anytime?',
-                a: 'Yes. Cancel from your account settings at any moment. No questions asked, no hassle.',
+                a: 'Yes. Cancel from your account settings at any moment. No questions asked.',
               },
               {
                 q: 'Is there a human on the other end?',
-                a: 'No — Vigil is an AI powered by Claude. It\'s not a human therapist or PI. It won\'t replace professional help, but it\'s available when they aren\'t.',
+                a: 'No — Vigil is an AI powered by advanced language models. It\'s not a human therapist or PI. But it\'s available when they aren\'t — especially at 2am.',
               },
             ].map((faq, i) => (
-              <motion.details
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="group bg-[#1e1c18] border border-[#2e2b25] rounded-xl overflow-hidden"
-              >
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-medium text-[#f0ebe0] list-none">
+              <details key={i} className="vigil-card overflow-hidden group">
+                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-medium text-[var(--text-primary)]">
                   {faq.q}
-                  <ChevronDown className="w-4 h-4 text-[#b8a98a] group-open:rotate-180 transition-transform" />
+                  <ChevronDown className="w-4 h-4 text-[var(--text-muted)] faq-chevron shrink-0 ml-4" />
                 </summary>
-                <div className="px-5 pb-4 text-sm text-[#b8a98a] leading-relaxed border-t border-[#2e2b25] pt-3">
+                <div className="px-5 pb-4 text-sm text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-subtle)] pt-3 -mt-px">
                   {faq.a}
                 </div>
-              </motion.details>
+              </details>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Privacy section */}
-      <section className="px-5 py-16 bg-[#0a0908]">
-        <AnimatedSection className="max-w-2xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Lock className="w-5 h-5 text-[#c9a84c]" />
-            <span className="text-[#c9a84c] font-medium text-sm uppercase tracking-wider">Privacy First</span>
+      {/* ═══ PRIVACY SECTION ═══ */}
+      <section className="section-elevated px-5 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-5">
+            <Lock className="w-5 h-5 text-[var(--vigil-gold)]" />
+            <span className="text-[var(--vigil-gold)] font-medium text-sm uppercase tracking-[0.15em]">Privacy First</span>
           </div>
-          <h2 className="text-2xl font-bold text-[#f0ebe0] mb-4">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
             Your secret is safe here.
           </h2>
-          <p className="text-[#b8a98a] leading-relaxed max-w-lg mx-auto mb-8">
+          <p className="text-[var(--text-secondary)] leading-relaxed max-w-lg mx-auto mb-10 text-sm">
             We handle your situation with the same discretion a trusted friend would. No real name needed. No data sold — ever. Delete everything instantly at any time.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { icon: <Lock className="w-4 h-4" />, label: 'Encrypted data' },
-              { icon: <Eye className="w-4 h-4" />, label: 'Zero analytics on content' },
-              { icon: <Shield className="w-4 h-4" />, label: 'Anonymous option' },
+              { icon: <Eye className="w-4 h-4" />, label: 'Zero content analytics' },
+              { icon: <Shield className="w-4 h-4" />, label: 'Anonymous accounts' },
               { icon: <FileText className="w-4 h-4" />, label: 'Instant deletion' },
             ].map((item, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 p-3 bg-[#1e1c18] rounded-xl border border-[#2e2b25]">
-                <div className="text-[#c9a84c]">{item.icon}</div>
-                <span className="text-xs text-[#b8a98a] text-center">{item.label}</span>
+              <div key={i} className="vigil-card flex flex-col items-center gap-3 p-4">
+                <div className="text-[var(--vigil-gold)]">{item.icon}</div>
+                <span className="text-xs text-[var(--text-secondary)] text-center font-medium">{item.label}</span>
               </div>
             ))}
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="px-5 py-24 bg-[#0f0e0c]">
-        <AnimatedSection className="max-w-xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#f0ebe0] mb-4 leading-tight">
-            You deserve to know the truth.
+      {/* ═══ FINAL CTA ═══ */}
+      <section className="section-dark px-5 py-28 relative">
+        {/* Top glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[var(--vigil-gold)]/[0.04] rounded-full blur-[100px]" />
+        <div className="max-w-xl mx-auto text-center relative">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-5 leading-tight tracking-tight">
+            You deserve to know<br />the truth.
           </h2>
-          <p className="text-[#b8a98a] mb-8 text-lg leading-relaxed">
+          <p className="text-[var(--text-secondary)] mb-10 text-lg leading-relaxed">
             Start your investigation free — no credit card, no commitment. Just answers.
           </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-[#c9a84c] text-[#0f0e0c] px-10 py-4 rounded-full font-semibold text-lg hover:bg-[#e0c070] transition-all hover:shadow-[0_0_40px_rgba(201,168,76,0.3)] active:scale-95"
-          >
+          <Link href="/signup" className="btn-gold inline-flex items-center gap-2 px-10 py-4 text-lg">
             Start your investigation
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-4 text-xs text-[#6e6050]">
-            10 free messages. No credit card. Cancel anytime.
+          <p className="mt-5 text-xs text-[var(--text-muted)]">
+            10 free messages · No credit card · Cancel anytime
           </p>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-5 py-8 border-t border-[#2e2b25] bg-[#0a0908]">
+      {/* ═══ FOOTER ═══ */}
+      <footer className="px-5 py-8 border-t border-[var(--border-subtle)] bg-[var(--bg-primary)]">
         <div className="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Eye className="w-4 h-4 text-[#c9a84c]" />
-            <span className="text-sm font-medium text-[#b8a98a]">VIGIL</span>
+          <div className="flex items-center gap-2.5">
+            <Eye className="w-4 h-4 text-[var(--vigil-gold)]" />
+            <span className="text-sm font-medium text-[var(--text-secondary)] tracking-[0.1em]">VIGIL</span>
           </div>
-          <div className="flex items-center gap-4 text-xs text-[#6e6050]">
-            <Link href="/pricing" className="hover:text-[#b8a98a] transition-colors">Pricing</Link>
-            <Link href="/login" className="hover:text-[#b8a98a] transition-colors">Sign in</Link>
+          <div className="flex items-center gap-5 text-xs text-[var(--text-muted)]">
+            <Link href="/pricing" className="hover:text-[var(--text-secondary)] transition-colors">Pricing</Link>
+            <Link href="/login" className="hover:text-[var(--text-secondary)] transition-colors">Sign in</Link>
             <span>© 2026 Vigil</span>
           </div>
         </div>

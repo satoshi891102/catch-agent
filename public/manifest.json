@@ -1,0 +1,22 @@
+{
+  "name": "Vigil — AI Relationship Investigator",
+  "short_name": "Vigil",
+  "description": "Discover the truth about your partner. Private, methodical, available at 2am.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0e0c",
+  "theme_color": "#0f0e0c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

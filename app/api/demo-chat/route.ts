@@ -119,27 +119,34 @@ export async function POST(request: NextRequest) {
     return response
 
   } catch (error: unknown) {
-    console.error('Demo chat error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorType = (error as { status?: number })?.status
+    console.error('Demo chat error:', { message: errorMessage, status: errorType, type: typeof error })
     
     // Differentiate error types for better user experience
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    
-    if (errorMessage.includes('rate_limit') || errorMessage.includes('429')) {
+    if (errorMessage.includes('rate_limit') || errorMessage.includes('429') || errorType === 429) {
       return NextResponse.json(
-        { error: 'Vigil is thinking hard. Please wait a moment and try again.' },
+        { error: 'Vigil is thinking hard. Please wait a moment and try again.', code: 'rate_limit' },
         { status: 429 }
       )
     }
     
-    if (errorMessage.includes('authentication') || errorMessage.includes('401') || errorMessage.includes('invalid_api_key')) {
+    if (errorMessage.includes('authentication') || errorMessage.includes('401') || errorMessage.includes('invalid_api_key') || errorType === 401) {
       return NextResponse.json(
-        { error: 'Vigil is temporarily unavailable. Please try again later.' },
+        { error: 'Vigil is temporarily in offline mode. You will still receive guidance.', code: 'api_unavailable' },
+        { status: 503 }
+      )
+    }
+
+    if (errorMessage.includes('model') || errorMessage.includes('not_found') || errorType === 404) {
+      return NextResponse.json(
+        { error: 'Vigil is temporarily in offline mode. You will still receive guidance.', code: 'model_error' },
         { status: 503 }
       )
     }
 
     return NextResponse.json(
-      { error: 'Something went wrong. Vigil will be back shortly.' },
+      { error: 'Something went wrong. Vigil will be back shortly.', code: 'unknown' },
       { status: 500 }
     )
   }

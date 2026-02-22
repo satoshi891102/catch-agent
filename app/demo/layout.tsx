@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Eye, MessageSquare, LayoutDashboard, FileText, CreditCard, LogOut } from 'lucide-react'
+import { Eye, MessageSquare, LayoutDashboard, FileText, CreditCard, LogOut, Shield } from 'lucide-react'
 
 export default function DemoLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,6 +21,7 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
           { href: '/demo', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
           { href: '/demo/chat', icon: <MessageSquare className="w-5 h-5" />, label: 'Chat' },
           { href: '/demo/evidence', icon: <FileText className="w-5 h-5" />, label: 'Evidence' },
+          { href: '/demo/toolkit', icon: <Shield className="w-5 h-5" />, label: 'Toolkit' },
         ].map((item) => (
           <Link
             key={item.href}
@@ -48,6 +49,7 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
             { href: '/demo', icon: <LayoutDashboard className="w-4 h-4" />, label: 'Dashboard' },
             { href: '/demo/chat', icon: <MessageSquare className="w-4 h-4" />, label: 'Investigation Chat' },
             { href: '/demo/evidence', icon: <FileText className="w-4 h-4" />, label: 'Evidence Log' },
+            { href: '/demo/toolkit', icon: <Shield className="w-4 h-4" />, label: 'Confrontation Toolkit' },
           ].map((item) => (
             <Link
               key={item.href}

@@ -7,54 +7,30 @@ export const maxDuration = 60
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { messages } = body as { messages: Array<{ role: string; content: string }> }
+    const {
+      messages,
+      caseFile: clientCaseFile,
+      evidence: clientEvidence,
+      messageCount: clientMessageCount,
+    } = body as {
+      messages: Array<{ role: string; content: string }>
+      caseFile?: CaseFile | null
+      evidence?: EvidenceItem[]
+      messageCount?: number
+    }
 
     if (!messages?.length) {
       return NextResponse.json({ error: 'Messages required' }, { status: 400 })
     }
 
-    // Build a demo-appropriate system prompt
-    const demoCaseFile: CaseFile = {
-      id: 'demo',
-      user_id: 'demo',
-      status: 'active',
-      phase: 2,
-      suspicion_level: 'moderate',
-      investigation_progress: 35,
-      partner_profile: {},
-      notes: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
+    // Use client-provided case data if available, otherwise use defaults
+    const caseFile: CaseFile | null = clientCaseFile || null
+    const evidence: EvidenceItem[] = clientEvidence || []
+    const messageCount = clientMessageCount || messages.filter(m => m.role === 'user').length
 
-    const demoEvidence: EvidenceItem[] = [
-      {
-        id: '1', user_id: 'demo', case_file_id: 'demo',
-        type: 'digital',
-        description: 'Changed phone password, phone always face-down',
-        date_observed: '3 days ago',
-        significance_level: 'high',
-        
-        module_source: null, tags: [],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-      {
-        id: '2', user_id: 'demo', case_file_id: 'demo',
-        type: 'schedule',
-        description: 'Working late Tue/Thu, never did before',
-        date_observed: '1 week ago',
-        significance_level: 'high',
-        
-        module_source: null, tags: [],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-    ]
+    const systemPrompt = buildSystemPrompt(caseFile, evidence, messageCount, false)
 
-    const systemPrompt = buildSystemPrompt(demoCaseFile, demoEvidence, 3, false)
-
-    const formattedMessages = messages.map(m => ({
+    const formattedMessages = messages.slice(-30).map(m => ({
       role: m.role as 'user' | 'assistant',
       content: m.content,
     }))
@@ -62,9 +38,14 @@ export async function POST(request: NextRequest) {
     // Call Claude
     const { getAnthropicClient } = await import('@/lib/anthropic')
     const client = await getAnthropicClient()
+
+    // Use Haiku for speed on general chat, Sonnet for analysis
+    const lastUserMsg = formattedMessages.filter(m => m.role === 'user').pop()?.content || ''
+    const needsSonnet = /pattern|analyz|assess|confront|evidence shows|what does this mean|ready to|summary|overview|what do you think/i.test(lastUserMsg)
+
     const aiResponse = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 800,
+      model: needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
       system: systemPrompt,
       messages: formattedMessages,
     })
@@ -73,7 +54,10 @@ export async function POST(request: NextRequest) {
       ? aiResponse.content[0].text
       : 'I had trouble processing that. Could you rephrase?'
 
-    return NextResponse.json({ content: reply })
+    return NextResponse.json({
+      content: reply,
+      model: needsSonnet ? 'sonnet' : 'haiku',
+    })
 
   } catch (error) {
     console.error('Demo chat error:', error)

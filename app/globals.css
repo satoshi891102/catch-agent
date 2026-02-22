@@ -155,6 +155,47 @@ details[open] summary .faq-chevron {
   transition: transform 0.2s ease;
 }
 
+/* Prose styling for legal/content pages */
+.prose-vigil h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.prose-vigil p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.prose-vigil ul {
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-vigil li {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  list-style-type: disc;
+}
+
+.prose-vigil li strong {
+  color: var(--text-primary);
+}
+
+.prose-vigil section {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose-vigil section:last-child {
+  border-bottom: none;
+}
+
 /* Chat bubble animations */
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(8px); }

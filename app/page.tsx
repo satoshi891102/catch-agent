@@ -543,6 +543,8 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-5 text-xs text-[var(--text-muted)]">
             <Link href="/pricing" className="hover:text-[var(--text-secondary)] transition-colors">Pricing</Link>
+            <Link href="/privacy" className="hover:text-[var(--text-secondary)] transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--text-secondary)] transition-colors">Terms</Link>
             <Link href="/login" className="hover:text-[var(--text-secondary)] transition-colors">Sign in</Link>
             <span>© 2026 Vigil</span>
           </div>

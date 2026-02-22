@@ -1,17 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Instrument_Serif } from 'next/font/google'
+import { DM_Serif_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({
+const dmSerifDisplay = DM_Serif_Display({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: '400',
+  variable: '--font-dm-serif-display',
   display: 'swap',
 })
 
-const instrumentSerif = Instrument_Serif({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-instrument-serif',
+  variable: '--font-dm-sans',
   display: 'swap',
 })
 
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0f0e0c',
+  themeColor: '#09090b',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable}`}>
+    <html lang="en" className={`${dmSerifDisplay.variable} ${dmSans.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -88,7 +88,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased min-h-screen">
+      <body className="font-[family-name:var(--font-dm-sans)] antialiased min-h-screen">
         {children}
       </body>
     </html>

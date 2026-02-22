@@ -1,9 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { CheckCircle, Eye, ArrowLeft, Shield, Lock, Zap, Star } from 'lucide-react'
+
+function FadeIn({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-40px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay, ease: [0.25, 0.4, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 const plans = [
   {
@@ -12,7 +28,6 @@ const plans = [
     price: 9.99,
     period: '/week',
     badge: 'Start Immediately',
-    badgeColor: 'text-[#b8a98a] bg-[#272420] border-[#2e2b25]',
     description: 'For when you need answers NOW. Cancel any week.',
     features: [
       'Unlimited conversations with Vigil',
@@ -32,7 +47,6 @@ const plans = [
     price: 29.99,
     period: '/month',
     badge: 'Best Value',
-    badgeColor: 'text-[#0f0e0c] bg-[#c9a84c] border-[#c9a84c]',
     description: 'For thorough investigations. Saves $10 vs weekly.',
     features: [
       'Everything in Weekly',
@@ -52,7 +66,6 @@ const plans = [
     price: 49.99,
     period: 'one-time',
     badge: 'When You\'re Ready',
-    badgeColor: 'text-[#b8a98a] bg-[#272420] border-[#2e2b25]',
     description: 'The complete playbook. Lifetime access.',
     features: [
       'Complete confrontation scripts',
@@ -108,137 +121,116 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] px-4 py-12">
+    <div className="min-h-screen bg-[var(--bg-primary)] px-6 py-16">
       <div className="max-w-4xl mx-auto">
 
-        {/* Back link */}
         <Link
           href="/demo"
-          className="inline-flex items-center gap-2 text-sm text-[#6e6050] hover:text-[#b8a98a] mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-[13px] text-[var(--text-muted)] hover:text-[var(--text-secondary)] mb-10 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to dashboard
         </Link>
 
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="text-center mb-14"
         >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Eye className="w-5 h-5 text-[#c9a84c]" />
-            <span className="font-semibold text-[#f0ebe0] tracking-wide">VIGIL</span>
+          <div className="flex items-center justify-center gap-2.5 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center">
+              <Eye className="w-4 h-4 text-[var(--vigil-gold)]" />
+            </div>
+            <span className="label-sm text-[var(--text-primary)] tracking-[0.15em]">VIGIL</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#f0ebe0] mb-3">
+          <h1 className="display-lg text-[var(--text-primary)] mb-4">
             Your investigation starts here.
           </h1>
-          <p className="text-[#b8a98a] max-w-lg mx-auto">
+          <p className="text-[15px] text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed">
             A private investigator costs $2,000–5,000. Vigil starts at $9.99/week.
             No judgment, no appointment, available at 2am.
           </p>
         </motion.div>
 
         {error && (
-          <div className="max-w-lg mx-auto mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
-            <p className="text-sm text-red-400 text-center">{error}</p>
+          <div className="max-w-lg mx-auto mb-8 p-4 bg-red-500/8 border border-red-500/15 rounded-xl">
+            <p className="text-[13px] text-red-400 text-center">{error}</p>
           </div>
         )}
 
-        {/* Comparison */}
-        <div className="grid grid-cols-3 gap-3 max-w-lg mx-auto mb-10 text-center">
-          {[
-            { label: 'Private Investigator', cost: '$2,000–5,000', icon: '👤' },
-            { label: 'Vigil Monthly', cost: '$29.99', icon: '🔮', highlight: true },
-            { label: 'Vigil Weekly', cost: '$9.99', icon: '⚡' },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className={`p-3 rounded-xl border text-center ${
-                item.highlight
-                  ? 'bg-[#c9a84c]/8 border-[#c9a84c]/30'
-                  : 'bg-[#1e1c18] border-[#2e2b25]'
-              }`}
-            >
-              <div className="text-lg mb-1">{item.icon}</div>
-              <div className={`text-sm font-bold ${item.highlight ? 'text-[#c9a84c]' : 'text-[#f0ebe0]'}`}>
-                {item.cost}
-              </div>
-              <div className="text-[10px] text-[#6e6050]">{item.label}</div>
-            </div>
-          ))}
-        </div>
-
         {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           {plans.map((plan, i) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={`relative flex flex-col p-6 rounded-2xl border ${
-                plan.highlighted
-                  ? 'bg-[#c9a84c]/6 border-[#c9a84c]/40 shadow-[0_0_40px_rgba(201,168,76,0.1)]'
-                  : 'bg-[#1e1c18] border-[#2e2b25]'
-              }`}
-            >
-              {plan.highlighted && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#c9a84c] text-[#0f0e0c] text-xs font-bold px-4 py-1.5 rounded-full">
-                  Most Popular
-                </div>
-              )}
-
-              <div className="mb-5">
-                <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full border mb-3 ${plan.badgeColor}`}>
-                  {plan.badge}
-                </span>
-                <div className="text-2xl font-bold text-[#f0ebe0]">
-                  ${plan.price}
-                  <span className="text-sm font-normal text-[#b8a98a]">{plan.period}</span>
-                </div>
-                <div className="text-base font-semibold text-[#f0ebe0] mt-0.5">{plan.name}</div>
-                <p className="text-sm text-[#b8a98a] mt-2 leading-relaxed">{plan.description}</p>
-              </div>
-
-              <ul className="space-y-2.5 mb-6 flex-1">
-                {plan.features.map((feature, j) => (
-                  <li key={j} className="flex items-start gap-2.5 text-sm">
-                    <CheckCircle className={`w-4 h-4 mt-0.5 shrink-0 ${
-                      plan.highlighted ? 'text-[#c9a84c]' : 'text-[#6e6050]'
-                    }`} />
-                    <span className="text-[#b8a98a]">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => handleCheckout(plan.id)}
-                disabled={loading === plan.id}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-60 flex items-center justify-center gap-2 ${
+            <FadeIn key={plan.id} delay={i * 0.08}>
+              <div
+                className={`relative flex flex-col p-7 rounded-2xl border h-full ${
                   plan.highlighted
-                    ? 'bg-[#c9a84c] text-[#0f0e0c] hover:bg-[#e0c070] hover:shadow-[0_0_20px_rgba(201,168,76,0.3)]'
-                    : 'bg-[#272420] border border-[#3e3830] text-[#f0ebe0] hover:bg-[#2e2b25]'
+                    ? 'bg-[var(--vigil-gold)]/[0.04] border-2 border-[var(--vigil-gold)]/30 shadow-glow md:scale-[1.03]'
+                    : 'vigil-card'
                 }`}
               >
-                {loading === plan.id ? (
-                  <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <Zap className="w-4 h-4" />
-                    {plan.cta}
-                  </>
+                {plan.highlighted && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--vigil-gold)] text-[var(--bg-primary)] label-xs px-4 py-1.5 rounded-full">
+                    MOST POPULAR
+                  </div>
                 )}
-              </button>
-            </motion.div>
+
+                <div className="mb-6">
+                  <span className={`inline-block label-xs px-2.5 py-1 rounded-md border mb-3 ${
+                    plan.highlighted
+                      ? 'text-[var(--vigil-gold)] bg-[var(--vigil-gold)]/8 border-[var(--vigil-gold)]/15'
+                      : 'text-[var(--text-muted)] bg-[var(--bg-elevated)] border-[var(--border-subtle)]'
+                  }`}>
+                    {plan.badge}
+                  </span>
+                  <div className="text-3xl font-bold text-[var(--text-primary)]">
+                    ${plan.price}
+                    <span className="text-[13px] font-normal text-[var(--text-muted)]">{plan.period}</span>
+                  </div>
+                  <div className="text-[15px] font-semibold text-[var(--text-primary)] mt-1">{plan.name}</div>
+                  <p className="text-[13px] text-[var(--text-secondary)] mt-2 leading-relaxed">{plan.description}</p>
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature, j) => (
+                    <li key={j} className="flex items-start gap-2.5 text-[13px]">
+                      <CheckCircle className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${
+                        plan.highlighted ? 'text-[var(--vigil-gold)]' : 'text-[var(--vigil-gold)]/60'
+                      }`} />
+                      <span className="text-[var(--text-secondary)]">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => handleCheckout(plan.id)}
+                  disabled={loading === plan.id}
+                  className={`w-full py-3 rounded-xl font-semibold text-[13px] transition-all disabled:opacity-60 flex items-center justify-center gap-2 ${
+                    plan.highlighted
+                      ? 'btn-gold'
+                      : 'bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] hover:border-[var(--border-strong)]'
+                  }`}
+                >
+                  {loading === plan.id ? (
+                    <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4" />
+                      {plan.cta}
+                    </>
+                  )}
+                </motion.button>
+              </div>
+            </FadeIn>
           ))}
         </div>
 
         {/* Free tier reminder */}
-        <div className="max-w-lg mx-auto text-center mb-10">
-          <p className="text-sm text-[#6e6050]">
+        <div className="max-w-lg mx-auto text-center mb-12">
+          <p className="text-[13px] text-[var(--text-muted)]">
             Not ready? You still have free messages available.{' '}
-            <Link href="/demo/chat" className="text-[#c9a84c] hover:text-[#e0c070]">
+            <Link href="/demo/chat" className="text-[var(--vigil-gold)] hover:text-[var(--vigil-gold-light)] transition-colors">
               Continue for free →
             </Link>
           </p>
@@ -252,16 +244,16 @@ export default function PricingPage() {
             { icon: <Eye className="w-4 h-4" />, title: '100% private', desc: 'Your data is yours' },
             { icon: <Star className="w-4 h-4" />, title: 'Instant access', desc: 'Start right away' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-1 p-3 bg-[#1e1c18] border border-[#2e2b25] rounded-xl text-center">
-              <div className="text-[#c9a84c]">{item.icon}</div>
-              <div className="text-xs font-medium text-[#f0ebe0]">{item.title}</div>
-              <div className="text-[10px] text-[#6e6050]">{item.desc}</div>
+            <div key={i} className="vigil-card flex flex-col items-center gap-1.5 p-5 text-center">
+              <div className="text-[var(--vigil-gold)]">{item.icon}</div>
+              <div className="text-[12px] font-medium text-[var(--text-primary)]">{item.title}</div>
+              <div className="text-[11px] text-[var(--text-muted)]">{item.desc}</div>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-xs text-[#6e6050] mt-8 max-w-md mx-auto">
-          By subscribing, you agree to our <Link href="/terms" className="text-[#c9a84c] hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-[#c9a84c] hover:underline">Privacy Policy</Link>. Vigil provides guidance only — not legal, medical, or professional investigative advice.
+        <p className="text-center text-[11px] text-[var(--text-muted)] mt-10 max-w-md mx-auto leading-relaxed">
+          By subscribing, you agree to our <Link href="/terms" className="text-[var(--vigil-gold)] hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-[var(--vigil-gold)] hover:underline">Privacy Policy</Link>. Vigil provides guidance only — not legal, medical, or professional investigative advice.
         </p>
       </div>
     </div>

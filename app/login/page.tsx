@@ -63,7 +63,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex flex-col items-center justify-center px-5 py-12">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center px-5 py-12">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -72,13 +72,13 @@ function LoginForm() {
       >
         {/* Logo */}
         <div className="flex items-center gap-2 justify-center mb-8">
-          <Eye className="w-5 h-5 text-[#c9a84c]" />
-          <span className="font-semibold text-[#f0ebe0] tracking-wide">VIGIL</span>
+          <Eye className="w-5 h-5 text-[var(--vigil-gold)]" />
+          <span className="font-semibold text-[var(--text-primary)] tracking-wide">VIGIL</span>
         </div>
 
-        <div className="bg-[#1e1c18] border border-[#2e2b25] rounded-2xl p-6">
-          <h1 className="text-xl font-bold text-[#f0ebe0] mb-1">Welcome back</h1>
-          <p className="text-sm text-[#b8a98a] mb-6">Sign in to continue your investigation.</p>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6">
+          <h1 className="text-xl font-bold text-[var(--text-primary)] mb-1">Welcome back</h1>
+          <p className="text-sm text-[var(--text-secondary)] mb-6">Sign in to continue your investigation.</p>
 
           {error && (
             <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl mb-4">
@@ -89,7 +89,7 @@ function LoginForm() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs text-[#b8a98a] mb-1.5 font-medium">Email</label>
+              <label className="block text-xs text-[var(--text-secondary)] mb-1.5 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
@@ -97,12 +97,12 @@ function LoginForm() {
                 placeholder="your@email.com"
                 required
                 autoComplete="email"
-                className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-4 py-3 text-sm text-[#f0ebe0] placeholder:text-[#6e6050] focus:outline-none focus:border-[#c9a84c]/50 focus:ring-1 focus:ring-[#c9a84c]/20 transition-colors"
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/50 focus:ring-1 focus:ring-[var(--vigil-gold)]/20 transition-colors"
               />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs text-[#b8a98a] font-medium">Password</label>
+                <label className="block text-xs text-[var(--text-secondary)] font-medium">Password</label>
               </div>
               <div className="relative">
                 <input
@@ -112,12 +112,12 @@ function LoginForm() {
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
-                  className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-4 py-3 pr-10 text-sm text-[#f0ebe0] placeholder:text-[#6e6050] focus:outline-none focus:border-[#c9a84c]/50 focus:ring-1 focus:ring-[#c9a84c]/20 transition-colors"
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-4 py-3 pr-10 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/50 focus:ring-1 focus:ring-[var(--vigil-gold)]/20 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6e6050] hover:text-[#b8a98a] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -126,10 +126,10 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] text-[#0f0e0c] py-3 rounded-xl font-semibold text-sm hover:bg-[#e0c070] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-[var(--vigil-gold)] text-[var(--bg-primary)] py-3 rounded-xl font-semibold text-sm hover:bg-[var(--vigil-gold-light)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-[#0f0e0c]/30 border-t-[#0f0e0c] rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-[var(--bg-primary)]/30 border-t-[var(--bg-primary)] rounded-full animate-spin" />
               ) : (
                 <>
                   Sign in
@@ -140,26 +140,26 @@ function LoginForm() {
           </form>
 
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-[#2e2b25]" />
-            <span className="text-xs text-[#6e6050]">or</span>
-            <div className="flex-1 h-px bg-[#2e2b25]" />
+            <div className="flex-1 h-px bg-[var(--border-default)]" />
+            <span className="text-xs text-[var(--text-muted)]">or</span>
+            <div className="flex-1 h-px bg-[var(--border-default)]" />
           </div>
 
           <button
             onClick={handleAnonymous}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-[#272420] border border-[#2e2b25] text-[#b8a98a] py-3 rounded-xl text-sm font-medium hover:bg-[#2e2b25] hover:text-[#f0ebe0] transition-all disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] py-3 rounded-xl text-sm font-medium hover:bg-[var(--border-default)] hover:text-[var(--text-primary)] transition-all disabled:opacity-50"
           >
             Continue anonymously
           </button>
-          <p className="text-xs text-[#6e6050] text-center mt-2">
+          <p className="text-xs text-[var(--text-muted)] text-center mt-2">
             No email needed. Fully private.
           </p>
         </div>
 
-        <p className="text-center text-sm text-[#6e6050] mt-6">
+        <p className="text-center text-sm text-[var(--text-muted)] mt-6">
           Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-[#c9a84c] hover:text-[#e0c070] transition-colors">
+          <Link href="/signup" className="text-[var(--vigil-gold)] hover:text-[var(--vigil-gold-light)] transition-colors">
             Start free
           </Link>
         </p>
@@ -171,8 +171,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-[#c9a84c]/30 border-t-[#c9a84c] rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[var(--vigil-gold)]/30 border-t-[var(--vigil-gold)] rounded-full animate-spin" />
       </div>
     }>
       <LoginForm />

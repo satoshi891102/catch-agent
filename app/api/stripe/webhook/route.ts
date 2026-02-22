@@ -79,7 +79,7 @@ async function handleCheckoutCompleted(
   if (session.mode === 'payment' && plan === 'confrontation') {
     // One-time payment for confrontation pack
     await supabase
-      .from('users')
+      .from('profiles')
       .update({
         subscription_status: 'active',
         subscription_plan: 'confrontation',
@@ -110,7 +110,7 @@ async function handleSubscriptionUpdate(
   if (!userId) {
     // Try to find user by customer ID
     const { data: userRecord } = await supabase
-      .from('users')
+      .from('profiles')
       .select('id')
       .eq('stripe_customer_id', subscription.customer)
       .single()
@@ -119,7 +119,7 @@ async function handleSubscriptionUpdate(
   }
 
   const targetUserId = userId || (await supabase
-    .from('users')
+    .from('profiles')
     .select('id')
     .eq('stripe_customer_id', subscription.customer)
     .single()).data?.id
@@ -132,7 +132,7 @@ async function handleSubscriptionUpdate(
 
   // Update user subscription status
   await supabase
-    .from('users')
+    .from('profiles')
     .update({
       subscription_status: status,
       subscription_plan: plan || 'monthly',
@@ -169,7 +169,7 @@ async function handleSubscriptionCanceled(
   if (!subscriptionRecord) return
 
   await supabase
-    .from('users')
+    .from('profiles')
     .update({
       subscription_status: 'canceled',
       subscription_plan: null,
@@ -198,7 +198,7 @@ async function handlePaymentFailed(
   if (!subscriptionRecord) return
 
   await supabase
-    .from('users')
+    .from('profiles')
     .update({ subscription_status: 'past_due' })
     .eq('id', subscriptionRecord.user_id)
 

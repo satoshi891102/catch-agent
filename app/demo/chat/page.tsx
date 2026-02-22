@@ -157,6 +157,15 @@ export default function DemoChatPage() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Hide the layout top bar on mobile — chat has its own header
+  useEffect(() => {
+    const topbar = document.getElementById('demo-topbar')
+    if (topbar) topbar.style.display = 'none'
+    return () => {
+      if (topbar) topbar.style.display = ''
+    }
+  }, [])
+
   // Load from localStorage on mount
   useEffect(() => {
     const conv = getDemoConversation()
@@ -169,7 +178,7 @@ export default function DemoChatPage() {
     if (conv.messages.length === 0) {
       const openingMsg: ChatMessage = {
         role: 'assistant',
-        content: "I'm Vigil. I'm here, and I'm listening.\n\nBefore we begin — everything you share stays between us. I don't judge, I don't take sides, and I won't tell you what to feel. My job is to help you see clearly.\n\nTell me: what made you reach out today? Start from wherever feels right.",
+        content: "I'm Vigil. I'm here — and whatever brought you here at this hour, I want you to know: you're not crazy for looking.\n\nEverything you share stays between us. I won't judge you, I won't rush you, and I won't tell you what to feel. My job is to help you see clearly when everything feels foggy.\n\nTell me what's been happening. Start wherever feels right — there's no wrong place to begin.",
         timestamp: new Date().toISOString(),
       }
       addMessageToConversation(openingMsg)

@@ -1,7 +1,12 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Eye, MessageSquare, LayoutDashboard, FileText, CreditCard, LogOut, Shield } from 'lucide-react'
 
 export default function DemoLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col">
       {/* Mobile top bar — hidden on chat page via CSS (chat has own header) */}
@@ -18,20 +23,25 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-2 py-2 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-t border-[var(--border-subtle)]">
         {[
-          { href: '/demo', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
+          { href: '/demo', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', exact: true },
           { href: '/demo/chat', icon: <MessageSquare className="w-5 h-5" />, label: 'Chat' },
           { href: '/demo/evidence', icon: <FileText className="w-5 h-5" />, label: 'Evidence' },
           { href: '/demo/toolkit', icon: <Shield className="w-5 h-5" />, label: 'Toolkit' },
-        ].map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex flex-col items-center gap-0.5 px-4 py-1.5 text-[var(--text-muted)] hover:text-[var(--vigil-gold)] transition-colors"
-          >
-            {item.icon}
-            <span className="text-[10px] font-medium">{item.label}</span>
-          </Link>
-        ))}
+        ].map((item) => {
+          const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center gap-0.5 px-4 py-1.5 transition-colors ${
+                isActive ? 'text-[var(--vigil-gold)]' : 'text-[var(--text-muted)] hover:text-[var(--vigil-gold)]'
+              }`}
+            >
+              {item.icon}
+              <span className="text-[10px] font-medium">{item.label}</span>
+            </Link>
+          )
+        })}
       </nav>
 
       {/* Desktop sidebar */}
@@ -46,20 +56,27 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
 
         <div className="flex-1 px-3 space-y-1">
           {[
-            { href: '/demo', icon: <LayoutDashboard className="w-4 h-4" />, label: 'Dashboard' },
+            { href: '/demo', icon: <LayoutDashboard className="w-4 h-4" />, label: 'Dashboard', exact: true },
             { href: '/demo/chat', icon: <MessageSquare className="w-4 h-4" />, label: 'Investigation Chat' },
             { href: '/demo/evidence', icon: <FileText className="w-4 h-4" />, label: 'Evidence Log' },
             { href: '/demo/toolkit', icon: <Shield className="w-4 h-4" />, label: 'Confrontation Toolkit' },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition-all"
-            >
-              {item.icon}
-              {item.label}
-            </Link>
-          ))}
+          ].map((item) => {
+            const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
+                  isActive
+                    ? 'text-[var(--vigil-gold)] bg-[var(--vigil-gold)]/8 font-medium'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            )
+          })}
         </div>
 
         <div className="px-3 pb-4 space-y-1">

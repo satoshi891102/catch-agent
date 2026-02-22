@@ -242,9 +242,11 @@ export default function DemoChatPage() {
       if (response.ok) {
         const data = await response.json()
         replyContent = data.content || "I'm sorry, I had trouble processing that. Could you try again?"
+      } else if (response.status === 429) {
+        replyContent = "I need a moment to collect my thoughts. Could you give me a minute before sending another message? I want to give you my full attention."
       } else {
-        // Fallback response
-        replyContent = "Thank you for sharing that. Let me think about what you've described.\n\nBased on what you've told me so far, I'd like to understand the timeline better. Can you walk me through when you first noticed something was different? The more specific you can be about dates and changes, the clearer the picture becomes."
+        // Fallback response for other errors
+        replyContent = "I'm having a brief connection issue, but I'm still here. Could you try sending that again in a moment?"
       }
 
       const aiMsg: ChatMessage = {

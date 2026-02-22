@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { Eye, ArrowRight, ArrowLeft, CheckCircle, Share2 } from 'lucide-react'
 
@@ -126,13 +127,13 @@ export default function QuizPage() {
             <div className="w-12 h-12 rounded-xl bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/30 flex items-center justify-center mx-auto mb-4">
               <Eye className="w-6 h-6 text-[var(--vigil-gold)]" />
             </div>
-            <h1 className="text-xl font-bold text-[var(--text-primary)] mb-1">Your Quick Assessment</h1>
+            <h1 className="display-md text-[var(--text-primary)] mb-1">Your Quick Assessment</h1>
             <p className="text-sm text-[var(--text-muted)]">Based on {questions.length} key indicators</p>
           </div>
 
           {/* Result card */}
           <div className={`p-6 rounded-2xl border mb-6 text-center ${result.bg}`}>
-            <div className={`text-xs tracking-[0.2em] uppercase font-mono mb-2 ${result.color}`}>
+            <div className={`label-xs mb-2 ${result.color}`}>
               Assessment Level
             </div>
             <div className={`text-2xl font-bold mb-3 ${result.color}`}>
@@ -234,26 +235,37 @@ export default function QuizPage() {
 
         {/* Question */}
         <div className="flex-1 flex flex-col justify-center">
-          <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-relaxed mb-12 text-center">
-            {q.text}
-          </h2>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentQ}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-relaxed mb-12 text-center" style={{ fontFamily: 'var(--font-display)' }}>
+                {q.text}
+              </h2>
 
-          {/* Answer buttons */}
-          <div className="space-y-3">
-            {(['yes', 'no', 'unsure'] as Answer[]).map(answer => (
-              <button
-                key={answer}
-                onClick={() => handleAnswer(answer)}
-                className={`w-full py-4 rounded-xl text-sm font-medium transition-all ${
-                  answers[q.id] === answer
-                    ? 'bg-[var(--vigil-gold)]/15 border-2 border-[var(--vigil-gold)]/40 text-[var(--vigil-gold)]'
-                    : 'bg-[var(--bg-elevated)] border-2 border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--vigil-gold)]/25 hover:bg-[var(--vigil-gold)]/5'
-                }`}
-              >
-                {answer === 'yes' ? 'Yes' : answer === 'no' ? 'No' : 'Not sure'}
-              </button>
-            ))}
-          </div>
+              {/* Answer buttons */}
+              <div className="space-y-3">
+                {(['yes', 'no', 'unsure'] as Answer[]).map(answer => (
+                  <motion.button
+                    key={answer}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleAnswer(answer)}
+                    className={`w-full py-4 rounded-xl text-[14px] font-medium transition-all ${
+                      answers[q.id] === answer
+                        ? 'bg-[var(--vigil-gold)]/12 border-2 border-[var(--vigil-gold)]/30 text-[var(--vigil-gold)]'
+                        : 'bg-[var(--bg-elevated)] border-2 border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--vigil-gold)]/20 hover:bg-[var(--vigil-gold)]/[0.04]'
+                    }`}
+                  >
+                    {answer === 'yes' ? 'Yes' : answer === 'no' ? 'No' : 'Not sure'}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Navigation */}

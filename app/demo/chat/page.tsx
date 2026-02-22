@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, Send, ArrowLeft, Lock, ArrowRight, RotateCcw } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -19,10 +20,9 @@ import { getFallbackResponse } from '@/lib/fallback-responses'
 import type { ChatMessage, EvidenceType, SignificanceLevel } from '@/lib/types'
 import { FREE_MESSAGE_LIMIT } from '@/lib/types'
 
-function MessageBubble({ message }: { message: ChatMessage }) {
+function MessageBubble({ message, index }: { message: ChatMessage; index: number }) {
   const isUser = message.role === 'user'
 
-  // Simple markdown-like formatting
   const formatContent = (text: string) => {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-[var(--text-primary)]">$1</strong>')
@@ -32,45 +32,55 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
 
   return (
-    <div className={`flex items-end gap-2.5 ${isUser ? 'flex-row-reverse' : ''}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 8, x: isUser ? 8 : -8 }}
+      animate={{ opacity: 1, y: 0, x: 0 }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.2), ease: [0.25, 0.4, 0.25, 1] }}
+      className={`flex items-end gap-2.5 ${isUser ? 'flex-row-reverse' : ''}`}
+    >
       {!isUser && (
-        <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center shrink-0 mb-0.5">
+        <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center shrink-0 mb-0.5">
           <Eye className="w-3.5 h-3.5 text-[var(--vigil-gold)]" />
         </div>
       )}
       <div
         className={`max-w-[82%] px-4 py-3 ${
           isUser
-            ? 'bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/20 rounded-2xl rounded-br-sm'
-            : 'bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl rounded-bl-sm'
+            ? 'bg-gradient-to-br from-[var(--vigil-gold)]/12 to-[var(--vigil-gold)]/6 border border-[var(--vigil-gold)]/15 rounded-2xl rounded-br-sm'
+            : 'bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl rounded-bl-[4px]'
         }`}
       >
         <div
-          className="text-sm leading-relaxed text-[var(--text-primary)] whitespace-pre-wrap"
+          className="text-[14px] leading-relaxed text-[var(--text-primary)] whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: formatContent(message.content) }}
         />
-        <p className="text-[10px] mt-1.5 text-[var(--text-dim)]">
+        <p className="text-[10px] mt-2 text-[var(--text-dim)]">
           {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
 function TypingIndicator() {
   return (
-    <div className="flex items-end gap-2.5">
-      <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center shrink-0">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      className="flex items-end gap-2.5"
+    >
+      <div className="w-7 h-7 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center shrink-0">
         <Eye className="w-3.5 h-3.5 text-[var(--vigil-gold)]" />
       </div>
-      <div className="bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl rounded-bl-sm px-4 py-3">
+      <div className="bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl rounded-bl-[4px] px-5 py-4">
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 rounded-full bg-[var(--text-muted)] typing-dot" />
           <div className="w-2 h-2 rounded-full bg-[var(--text-muted)] typing-dot" />
           <div className="w-2 h-2 rounded-full bg-[var(--text-muted)] typing-dot" />
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -107,21 +117,25 @@ function CrisisBanner({ type, onDismiss }: { type: 'suicide' | 'dv' | 'harm'; on
   }
 
   const r = resources[type]
-  const borderColor = type === 'suicide' ? 'border-red-500/30 bg-red-500/8' : type === 'dv' ? 'border-orange-500/30 bg-orange-500/8' : 'border-amber-500/30 bg-amber-500/8'
+  const borderColor = type === 'suicide' ? 'border-red-500/20 bg-red-500/5' : type === 'dv' ? 'border-orange-500/20 bg-orange-500/5' : 'border-amber-500/20 bg-amber-500/5'
   const titleColor = type === 'suicide' ? 'text-red-400' : type === 'dv' ? 'text-orange-400' : 'text-amber-400'
 
   return (
-    <div className={`mx-2 p-4 border rounded-xl ${borderColor}`}>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`mx-2 p-4 border rounded-xl ${borderColor}`}
+    >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <p className={`text-sm font-semibold ${titleColor}`}>{r.title}</p>
-        <button onClick={onDismiss} className="text-[var(--text-muted)] text-xs shrink-0 hover:text-[var(--text-secondary)]">✕</button>
+        <p className={`text-[13px] font-semibold ${titleColor}`}>{r.title}</p>
+        <button onClick={onDismiss} className="text-[var(--text-muted)] text-xs shrink-0 hover:text-[var(--text-secondary)] transition-colors">✕</button>
       </div>
       <ul className="space-y-1.5">
         {r.lines.map((line, i) => (
-          <li key={i} className="text-xs text-[var(--text-secondary)] leading-relaxed">• {line}</li>
+          <li key={i} className="text-[12px] text-[var(--text-secondary)] leading-relaxed">• {line}</li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   )
 }
 
@@ -131,14 +145,19 @@ function EvidencePrompt({ evidence, onAccept, onDismiss }: {
   onDismiss: () => void
 }) {
   return (
-    <div className="mx-2 p-3 bg-[var(--vigil-gold)]/[0.06] border border-[var(--vigil-gold)]/20 rounded-xl">
-      <p className="text-xs text-[var(--vigil-gold)] font-medium mb-1.5">Evidence detected — add to case file?</p>
-      <p className="text-sm text-[var(--text-secondary)] mb-3">{evidence.description}</p>
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      className="mx-2 p-4 bg-[var(--vigil-gold)]/[0.04] border border-[var(--vigil-gold)]/15 rounded-xl"
+    >
+      <p className="label-xs text-[var(--vigil-gold)] mb-2">Evidence detected — add to case file?</p>
+      <p className="text-[13px] text-[var(--text-secondary)] mb-3 leading-relaxed">{evidence.description}</p>
       <div className="flex gap-2">
-        <button onClick={onAccept} className="btn-gold text-xs px-3 py-1.5">Add to evidence</button>
-        <button onClick={onDismiss} className="text-xs text-[var(--text-muted)] px-3 py-1.5">Dismiss</button>
+        <button onClick={onAccept} className="btn-gold text-[12px] px-4 py-2">Add to evidence</button>
+        <button onClick={onDismiss} className="text-[12px] text-[var(--text-muted)] px-3 py-2 hover:text-[var(--text-secondary)] transition-colors">Dismiss</button>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -147,7 +166,7 @@ export default function DemoChatPage() {
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [messageCount, setMessageCount] = useState(0)
-  const [isPaid] = useState(false) // Demo is always free tier
+  const [isPaid] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [pendingEvidence, setPendingEvidence] = useState<Array<{
     type: EvidenceType
@@ -158,7 +177,6 @@ export default function DemoChatPage() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Hide the layout top bar on mobile — chat has its own header
   useEffect(() => {
     const topbar = document.getElementById('demo-topbar')
     if (topbar) topbar.style.display = 'none'
@@ -167,7 +185,6 @@ export default function DemoChatPage() {
     }
   }, [])
 
-  // Load from localStorage on mount
   useEffect(() => {
     const conv = getDemoConversation()
     const user = getDemoUser()
@@ -175,7 +192,6 @@ export default function DemoChatPage() {
     setMessageCount(user.message_count)
     setIsLoaded(true)
 
-    // If no messages yet, send Vigil's opening message
     if (conv.messages.length === 0) {
       const openingMsg: ChatMessage = {
         role: 'assistant',
@@ -187,7 +203,6 @@ export default function DemoChatPage() {
     }
   }, [])
 
-  // Auto-scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping, pendingEvidence])
@@ -202,7 +217,6 @@ export default function DemoChatPage() {
       timestamp: new Date().toISOString(),
     }
 
-    // Add to local state + storage
     const updatedMessages = [...messages, userMsg]
     setMessages(updatedMessages)
     addMessageToConversation(userMsg)
@@ -211,7 +225,6 @@ export default function DemoChatPage() {
     const newCount = incrementMessageCount()
     setMessageCount(newCount)
 
-    // Create case file after first message if none exists
     if (!getDemoCaseFile()) {
       createDemoCaseFile()
     }
@@ -219,8 +232,6 @@ export default function DemoChatPage() {
     setIsTyping(true)
 
     try {
-      // Send to AI with full conversation context
-      // Send case context so AI has full picture
       const currentCase = getDemoCaseFile()
       const currentEvidence = getDemoEvidence()
 
@@ -246,7 +257,6 @@ export default function DemoChatPage() {
       } else if (response.status === 429) {
         replyContent = "I need a moment to collect my thoughts. Could you give me a minute before sending another message? I want to give you my full attention."
       } else {
-        // Smart fallback — contextual response based on user's message
         replyContent = getFallbackResponse({
           userMessage: input.trim(),
           messageCount: newCount,
@@ -262,18 +272,11 @@ export default function DemoChatPage() {
 
       setMessages(prev => [...prev, aiMsg])
       addMessageToConversation(aiMsg)
-
-      // Update case file based on new state
       updateCaseFromState()
-
-      // Check for crisis language
       detectCrisis(userMsg.content)
-
-      // Check for evidence-like content in user message
       autoExtractEvidence(userMsg.content)
 
     } catch {
-      // Network error — use smart fallback
       const fallback = getFallbackResponse({
         userMessage: userMsg.content,
         messageCount: newCount,
@@ -292,7 +295,6 @@ export default function DemoChatPage() {
     }
   }, [input, isTyping, isPaid, messageCount, messages])
 
-  // Detect crisis language and show appropriate resources
   const detectCrisis = (text: string) => {
     const lower = text.toLowerCase()
     if (/\b(kill\s*(my)?self|suicid|end\s*(it|my\s*life)|don'?t\s*want\s*to\s*(live|be\s*alive|exist)|rather\s*(be\s*dead|die)|no\s*reason\s*to\s*live)\b/i.test(lower)) {
@@ -304,17 +306,13 @@ export default function DemoChatPage() {
     }
   }
 
-  // Auto-extract evidence from user messages
-  // Requires compound signals — not single generic keywords
   const autoExtractEvidence = (text: string) => {
     const lower = text.toLowerCase()
     const words = lower.split(/\s+/).length
     const suggestions: Array<{ type: EvidenceType; description: string; significance_level: SignificanceLevel }> = []
 
-    // Skip very short messages — not enough context
     if (words < 8) return
 
-    // Digital evidence — require compound signals (action + subject)
     const digitalHigh = /changed?.{0,20}password|new.{0,15}lock|tinder|bumble|hinge|grindr|hidden.{0,15}app|deleted?.{0,15}message|secret.{0,15}(app|folder|account)|vault.{0,10}app|calculator\+|face.?down|screen.{0,10}(tilt|away|hide)/i
     const digitalMed = /(phone|device).{0,30}(never|always|won't let|doesn't let|protective|guarded)|(always|suddenly).{0,20}(face.?down|silent|airplane|bathroom)/i
     if (digitalHigh.test(lower)) {
@@ -323,7 +321,6 @@ export default function DemoChatPage() {
       suggestions.push({ type: 'digital', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Schedule evidence — require pattern language, not just days of week
     const scheduleHigh = /(suddenly|recently|started|never.{0,10}before|didn't.{0,10}use.?to).{0,30}(overtime|late|work trip|business trip|gone|disappear|absent)/i
     const scheduleMed = /(unaccounted|can't.{0,10}explain|doesn't add up|story.{0,15}(change|different|match)|where.{0,15}(was|were|been))/i
     if (scheduleHigh.test(lower)) {
@@ -332,7 +329,6 @@ export default function DemoChatPage() {
       suggestions.push({ type: 'schedule', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Financial evidence — require suspicious context, not just "credit card"
     const financialCritical = /hotel.{0,30}(charge|receipt|bill|reservation)|unknown.{0,20}(charge|transaction|withdrawal)|unexplained.{0,20}(expense|charge|purchase)|restaurant.{0,20}(didn't|never|wasn't)/i
     const financialHigh = /(secret|hidden|separate|new).{0,20}(account|credit.?card|bank)|cash.{0,20}(only|withdrawal|atm).{0,30}(unexplained|unusual|sudden)|venmo.{0,20}(unknown|don't.{0,10}know)/i
     if (financialCritical.test(lower)) {
@@ -341,7 +337,6 @@ export default function DemoChatPage() {
       suggestions.push({ type: 'financial', description: text.slice(0, 200), significance_level: 'high' })
     }
 
-    // Communication evidence — require suspicious context
     const commHigh = /(whisper|leave.{0,10}room|hang.{0,5}up|step.{0,10}(outside|away)).{0,30}(call|phone|text)|(deleted?|erased?|cleared?).{0,20}(text|message|chat|thread|conversation|history)|second.{0,10}(phone|sim|device)/i
     const commMed = /(constant|always|excessive).{0,20}(text|message|dm|chat).{0,30}(stop|hide|when i)|(new|unfamiliar|generic).{0,20}(contact|name|number)/i
     if (commHigh.test(lower)) {
@@ -350,7 +345,6 @@ export default function DemoChatPage() {
       suggestions.push({ type: 'communication', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Behavioral evidence — require change/pattern language
     const behavioralHigh = /(gaslight|guilt.{0,10}(trip|gift)|over.?compensat|accus.{0,10}(me|snooping)|turn.{0,10}(it|things).{0,10}(around|on me))/i
     const behavioralMed = /(suddenly|recently|started|never.{0,10}before).{0,30}(gym|cologne|perfume|clothes|grooming|appearance|weight|shower)|new.{0,20}(interest|music|show|restaurant).{0,30}(never|didn't|don't)/i
     if (behavioralHigh.test(lower)) {
@@ -359,7 +353,6 @@ export default function DemoChatPage() {
       suggestions.push({ type: 'behavioral', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Only show one suggestion at a time (the highest priority)
     if (suggestions.length > 0) {
       const sorted = suggestions.sort((a, b) => {
         const levels = { critical: 4, high: 3, medium: 2, low: 1 }
@@ -394,8 +387,13 @@ export default function DemoChatPage() {
 
   if (!isLoaded) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="w-8 h-8 border-2 border-[var(--vigil-gold)]/30 border-t-[var(--vigil-gold)] rounded-full animate-spin" />
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center">
+            <Eye className="w-5 h-5 text-[var(--vigil-gold)] animate-pulse" />
+          </div>
+          <span className="text-[12px] text-[var(--text-muted)]">Loading investigation...</span>
+        </div>
       </div>
     )
   }
@@ -407,23 +405,23 @@ export default function DemoChatPage() {
         <Link href="/demo" className="md:hidden text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <div className="w-9 h-9 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center">
           <Eye className="w-4 h-4 text-[var(--vigil-gold)]" />
         </div>
         <div className="flex-1">
-          <div className="text-sm font-medium text-[var(--text-primary)]">Vigil</div>
-          <div className="text-xs text-emerald-400 flex items-center gap-1.5">
+          <div className="text-[14px] font-medium text-[var(--text-primary)]">Vigil</div>
+          <div className="text-[11px] text-emerald-400 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
             Active · Phase {getDemoCaseFile()?.phase || 1}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="text-xs text-[var(--text-muted)] bg-[var(--bg-card)] px-2.5 py-1 rounded-full border border-[var(--border-subtle)]">
+          <div className="text-[11px] text-[var(--text-muted)] bg-[var(--bg-card)] px-2.5 py-1.5 rounded-lg border border-[var(--border-subtle)]">
             {remainingMsgs > 0 ? `${remainingMsgs} msgs left` : 'Limit reached'}
           </div>
           <button
             onClick={handleReset}
-            className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors p-1"
+            className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors p-1.5 rounded-lg hover:bg-[var(--bg-card)]"
             title="Reset investigation"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -432,50 +430,57 @@ export default function DemoChatPage() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5">
-        {messages.map((msg, i) => (
-          <MessageBubble key={i} message={msg} />
-        ))}
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-5">
+        <AnimatePresence>
+          {messages.map((msg, i) => (
+            <MessageBubble key={i} message={msg} index={i} />
+          ))}
 
-        {isTyping && <TypingIndicator />}
+          {isTyping && <TypingIndicator />}
 
-        {/* Crisis banner */}
-        {crisisBanner && (
-          <CrisisBanner type={crisisBanner} onDismiss={() => setCrisisBanner(null)} />
-        )}
+          {crisisBanner && (
+            <CrisisBanner type={crisisBanner} onDismiss={() => setCrisisBanner(null)} />
+          )}
 
-        {/* Evidence prompts */}
-        {pendingEvidence.map((evidence, i) => (
-          <EvidencePrompt
-            key={i}
-            evidence={evidence}
-            onAccept={() => handleAcceptEvidence(i)}
-            onDismiss={() => handleDismissEvidence(i)}
-          />
-        ))}
+          {pendingEvidence.map((evidence, i) => (
+            <EvidencePrompt
+              key={i}
+              evidence={evidence}
+              onAccept={() => handleAcceptEvidence(i)}
+              onDismiss={() => handleDismissEvidence(i)}
+            />
+          ))}
 
-        {/* Paywall */}
-        {hitPaywall && (
-          <div className="mx-auto max-w-sm p-6 bg-[var(--vigil-gold)]/[0.06] border border-[var(--vigil-gold)]/25 rounded-2xl text-center">
-            <div className="w-12 h-12 rounded-full bg-[var(--vigil-gold)]/12 border border-[var(--vigil-gold)]/25 flex items-center justify-center mx-auto mb-3">
-              <Lock className="w-5 h-5 text-[var(--vigil-gold)]" />
-            </div>
-            <h3 className="font-semibold text-[var(--text-primary)] mb-1.5">Your investigation continues</h3>
-            <p className="text-sm text-[var(--text-secondary)] mb-5">
-              You&apos;ve used your 10 free messages. Upgrade to continue — starting at $9.99/week.
-            </p>
-            <Link href="/pricing" className="btn-gold inline-flex items-center gap-2 px-6 py-2.5 text-sm">
-              View plans <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        )}
+          {hitPaywall && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mx-auto max-w-sm p-7 bg-[var(--vigil-gold)]/[0.04] border border-[var(--vigil-gold)]/20 rounded-2xl text-center"
+            >
+              <div className="w-12 h-12 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-5 h-5 text-[var(--vigil-gold)]" />
+              </div>
+              <h3 className="font-semibold text-[var(--text-primary)] mb-2 text-[15px]">Your investigation continues</h3>
+              <p className="text-[13px] text-[var(--text-secondary)] mb-6 leading-relaxed">
+                You&apos;ve used your 10 free messages. Upgrade to continue — starting at $9.99/week.
+              </p>
+              <Link href="/pricing" className="btn-gold inline-flex items-center gap-2 px-6 py-2.5 text-[13px]">
+                View plans <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div ref={bottomRef} />
       </div>
 
-      {/* Suggestion chips — show when few messages and not typing */}
+      {/* Suggestion chips */}
       {!isTyping && !hitPaywall && messages.length <= 3 && messages.length > 0 && (
-        <div className="shrink-0 px-4 py-2 flex flex-wrap gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="shrink-0 px-4 py-2.5 flex flex-wrap gap-2"
+        >
           {(messageCount === 0 ? [
             'My partner changed their phone password recently',
             'They\'ve been coming home late from work',
@@ -487,23 +492,28 @@ export default function DemoChatPage() {
             'There are other things I\'ve noticed too',
             'Am I overreacting?',
           ] : []).map((suggestion, i) => (
-            <button
+            <motion.button
               key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => { setInput(suggestion); inputRef.current?.focus() }}
-              className="text-xs px-3 py-1.5 rounded-full bg-[var(--vigil-gold)]/[0.06] border border-[var(--vigil-gold)]/15 text-[var(--text-secondary)] hover:bg-[var(--vigil-gold)]/10 hover:text-[var(--vigil-gold)] transition-all"
+              className="text-[12px] px-3.5 py-2 rounded-lg bg-[var(--vigil-gold)]/[0.04] border border-[var(--vigil-gold)]/10 text-[var(--text-secondary)] hover:bg-[var(--vigil-gold)]/8 hover:text-[var(--vigil-gold)] hover:border-[var(--vigil-gold)]/20 transition-colors"
             >
               {suggestion}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Input */}
-      <div className="shrink-0 px-4 py-3 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
+      <div className="shrink-0 px-4 py-3.5 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
         {hitPaywall ? (
-          <div className="flex items-center justify-center gap-2 py-2 text-sm text-[var(--text-muted)]">
+          <div className="flex items-center justify-center gap-2 py-2 text-[13px] text-[var(--text-muted)]">
             <Lock className="w-3.5 h-3.5" />
-            <Link href="/pricing" className="text-[var(--vigil-gold)] hover:text-[var(--vigil-gold-light)] font-medium">
+            <Link href="/pricing" className="text-[var(--vigil-gold)] hover:text-[var(--vigil-gold-light)] font-medium transition-colors">
               Upgrade to continue
             </Link>
           </div>
@@ -517,15 +527,16 @@ export default function DemoChatPage() {
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder="Tell Vigil what you've noticed..."
               disabled={isTyping}
-              className="flex-1 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-full px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/40 focus:ring-1 focus:ring-[var(--vigil-gold)]/15 transition-all disabled:opacity-50"
+              className="flex-1 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/30 focus:ring-1 focus:ring-[var(--vigil-gold)]/10 transition-all disabled:opacity-50"
             />
-            <button
+            <motion.button
+              whileTap={{ scale: 0.92 }}
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="btn-gold w-10 h-10 flex items-center justify-center rounded-full disabled:opacity-30 disabled:cursor-not-allowed"
+              className="btn-gold w-11 h-11 flex items-center justify-center rounded-xl disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
-            </button>
+            </motion.button>
           </div>
         )}
       </div>

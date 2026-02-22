@@ -81,6 +81,14 @@ export default function LandingPage() {
               </span>
             ))}
           </div>
+
+          <div className="mt-8 flex items-center justify-center gap-2 text-xs text-[var(--text-muted)]">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            <span>12 people investigating right now</span>
+          </div>
         </div>
 
         {/* Decorative bottom fade */}

@@ -39,9 +39,12 @@ export async function POST(request: NextRequest) {
     const { getAnthropicClient } = await import('@/lib/anthropic')
     const client = await getAnthropicClient()
 
-    // Use Haiku for speed on general chat, Sonnet for analysis
+    // Use Haiku for speed on general chat, Sonnet for analysis and early critical moments
     const lastUserMsg = formattedMessages.filter(m => m.role === 'user').pop()?.content || ''
-    const needsSonnet = /pattern|analyz|assess|confront|evidence shows|what does this mean|ready to|summary|overview|what do you think/i.test(lastUserMsg)
+    const userMsgCount = formattedMessages.filter(m => m.role === 'user').length
+    // Use Sonnet for first 3 messages (critical for retention), analysis requests, and crisis language
+    const isCrisis = /\b(kill|suicid|end.{0,5}(it|life)|hurt.{0,5}(my)?self|don'?t want to live|afraid|violent|abuse|hit.{0,5}me|beat|threaten)\b/i.test(lastUserMsg)
+    const needsSonnet = isCrisis || userMsgCount <= 3 || /pattern|analyz|assess|confront|evidence shows|what does this mean|ready to|summary|overview|what do you think/i.test(lastUserMsg)
 
     const aiResponse = await client.messages.create({
       model: needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',

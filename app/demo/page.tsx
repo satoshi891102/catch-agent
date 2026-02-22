@@ -205,6 +205,22 @@ export default function DemoDashboard() {
         </Link>
       </div>
 
+      {/* Report CTA — show when there's evidence */}
+      {evidence.length >= 2 && (
+        <Link href="/demo/report" className="block mb-4 p-4 vigil-card group">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-[var(--vigil-gold)]/8 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-[var(--vigil-gold)]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--vigil-gold)] transition-colors">View Assessment Report</div>
+              <div className="text-xs text-[var(--text-muted)]">Shareable summary of your investigation</div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--vigil-gold)] transition-colors" />
+          </div>
+        </Link>
+      )}
+
       {/* Recent evidence */}
       {evidence.length > 0 && (
         <div className="mb-4">

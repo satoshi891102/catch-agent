@@ -26,7 +26,7 @@ const TYPE_COLORS: Record<EvidenceType, string> = {
 }
 
 const SIGNIFICANCE_COLORS: Record<SignificanceLevel, string> = {
-  low: 'text-[#6e6050] bg-[#6e6050]/10',
+  low: 'text-[var(--text-muted)] bg-[var(--text-muted)]/10',
   medium: 'text-amber-400 bg-amber-400/10',
   high: 'text-orange-400 bg-orange-400/10',
   critical: 'text-red-400 bg-red-400/10',
@@ -80,9 +80,9 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
         transition={{ type: 'spring', damping: 25 }}
-        className="w-full max-w-md bg-[#1e1c18] border border-[#2e2b25] rounded-2xl p-5"
+        className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-5"
       >
-        <h3 className="font-semibold text-[#f0ebe0] mb-4">Log Evidence</h3>
+        <h3 className="font-semibold text-[var(--text-primary)] mb-4">Log Evidence</h3>
 
         {error && (
           <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl mb-4">
@@ -94,7 +94,7 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Type */}
           <div>
-            <label className="block text-xs text-[#b8a98a] mb-2 font-medium">Evidence Type</label>
+            <label className="block text-xs text-[var(--text-secondary)] mb-2 font-medium">Evidence Type</label>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {(Object.keys(EVIDENCE_TYPE_LABELS) as EvidenceType[]).map(t => (
                 <button
@@ -104,7 +104,7 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
                     type === t
                       ? `${TYPE_COLORS[t]} border-current`
-                      : 'bg-[#0f0e0c] border-[#2e2b25] text-[#6e6050] hover:text-[#b8a98a]'
+                      : 'bg-[var(--bg-primary)] border-[var(--border-default)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
                   }`}
                 >
                   {TYPE_ICONS[t]}
@@ -116,7 +116,7 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
 
           {/* Description */}
           <div>
-            <label className="block text-xs text-[#b8a98a] mb-1.5 font-medium">
+            <label className="block text-xs text-[var(--text-secondary)] mb-1.5 font-medium">
               What did you observe?
             </label>
             <textarea
@@ -125,27 +125,27 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
               placeholder="Describe what you noticed in detail..."
               rows={3}
               required
-              className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-4 py-3 text-sm text-[#f0ebe0] placeholder:text-[#6e6050] focus:outline-none focus:border-[#c9a84c]/50 resize-none"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/50 resize-none"
             />
           </div>
 
           {/* Date and Significance row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#b8a98a] mb-1.5 font-medium">Date Observed</label>
+              <label className="block text-xs text-[var(--text-secondary)] mb-1.5 font-medium">Date Observed</label>
               <input
                 type="date"
                 value={dateObserved}
                 onChange={e => setDateObserved(e.target.value)}
-                className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-3 py-2.5 text-sm text-[#f0ebe0] focus:outline-none focus:border-[#c9a84c]/50"
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--vigil-gold)]/50"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#b8a98a] mb-1.5 font-medium">Significance</label>
+              <label className="block text-xs text-[var(--text-secondary)] mb-1.5 font-medium">Significance</label>
               <select
                 value={significance}
                 onChange={e => setSignificance(e.target.value as SignificanceLevel)}
-                className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-3 py-2.5 text-sm text-[#f0ebe0] focus:outline-none focus:border-[#c9a84c]/50"
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--vigil-gold)]/50"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -157,13 +157,13 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
 
           {/* Module */}
           <div>
-            <label className="block text-xs text-[#b8a98a] mb-1.5 font-medium">
-              Investigation Module <span className="text-[#6e6050]">(optional)</span>
+            <label className="block text-xs text-[var(--text-secondary)] mb-1.5 font-medium">
+              Investigation Module <span className="text-[var(--text-muted)]">(optional)</span>
             </label>
             <select
               value={module}
               onChange={e => setModule(e.target.value as InvestigationModule | '')}
-              className="w-full bg-[#0f0e0c] border border-[#2e2b25] rounded-xl px-3 py-2.5 text-sm text-[#f0ebe0] focus:outline-none focus:border-[#c9a84c]/50"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-default)] rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--vigil-gold)]/50"
             >
               <option value="">None selected</option>
               <option value="A">Module A — Digital Behavior</option>
@@ -178,14 +178,14 @@ function AddEvidenceForm({ onAdd, onClose }: AddEvidenceFormProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-[#2e2b25] text-sm text-[#b8a98a] hover:text-[#f0ebe0] hover:bg-[#272420] transition-all"
+              className="flex-1 py-2.5 rounded-xl border border-[var(--border-default)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !description.trim()}
-              className="flex-1 py-2.5 rounded-xl bg-[#c9a84c] text-[#0f0e0c] text-sm font-semibold hover:bg-[#e0c070] transition-all disabled:opacity-50"
+              className="flex-1 py-2.5 rounded-xl bg-[var(--vigil-gold)] text-[var(--bg-primary)] text-sm font-semibold hover:bg-[var(--vigil-gold-light)] transition-all disabled:opacity-50"
             >
               {loading ? 'Saving...' : 'Log Evidence'}
             </button>
@@ -279,12 +279,12 @@ export default function EvidencePage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-bold text-[#f0ebe0]">Evidence Log</h1>
-            <p className="text-sm text-[#6e6050]">{evidence.length} items recorded</p>
+            <h1 className="text-xl font-bold text-[var(--text-primary)]">Evidence Log</h1>
+            <p className="text-sm text-[var(--text-muted)]">{evidence.length} items recorded</p>
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-1.5 bg-[#c9a84c] text-[#0f0e0c] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#e0c070] transition-all"
+            className="flex items-center gap-1.5 bg-[var(--vigil-gold)] text-[var(--bg-primary)] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[var(--vigil-gold-light)] transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             Log Evidence
@@ -301,11 +301,11 @@ export default function EvidencePage() {
                 className={`flex flex-col items-center p-2 rounded-xl border text-center transition-all ${
                   filter === type
                     ? `${TYPE_COLORS[type]} border-current`
-                    : 'bg-[#1e1c18] border-[#2e2b25] text-[#6e6050] hover:text-[#b8a98a]'
+                    : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
                 }`}
               >
                 <div className="mb-1">{TYPE_ICONS[type]}</div>
-                <span className="text-lg font-bold text-[#f0ebe0]">{countByType[type] || 0}</span>
+                <span className="text-lg font-bold text-[var(--text-primary)]">{countByType[type] || 0}</span>
                 <span className="text-[9px] leading-tight">{type}</span>
               </button>
             ))}
@@ -315,12 +315,12 @@ export default function EvidencePage() {
         {/* Search */}
         {evidence.length > 3 && (
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6e6050]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search evidence..."
-              className="w-full bg-[#1e1c18] border border-[#2e2b25] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#f0ebe0] placeholder:text-[#6e6050] focus:outline-none focus:border-[#c9a84c]/50"
+              className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--vigil-gold)]/50"
             />
           </div>
         )}
@@ -328,27 +328,27 @@ export default function EvidencePage() {
         {/* Evidence list */}
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-6 h-6 border-2 border-[#c9a84c]/30 border-t-[#c9a84c] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[var(--vigil-gold)]/30 border-t-[var(--vigil-gold)] rounded-full animate-spin" />
           </div>
         ) : evidence.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-14 h-14 rounded-2xl bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-7 h-7 text-[#c9a84c]" />
+            <div className="w-14 h-14 rounded-2xl bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/20 flex items-center justify-center mx-auto mb-4">
+              <FileText className="w-7 h-7 text-[var(--vigil-gold)]" />
             </div>
-            <h3 className="font-semibold text-[#f0ebe0] mb-2">No evidence logged yet</h3>
-            <p className="text-sm text-[#b8a98a] max-w-xs mx-auto mb-5">
+            <h3 className="font-semibold text-[var(--text-primary)] mb-2">No evidence logged yet</h3>
+            <p className="text-sm text-[var(--text-secondary)] max-w-xs mx-auto mb-5">
               As you investigate, log every detail here. Patterns emerge from the details.
             </p>
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 bg-[#c9a84c] text-[#0f0e0c] px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#e0c070] transition-all"
+              className="inline-flex items-center gap-2 bg-[var(--vigil-gold)] text-[var(--bg-primary)] px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[var(--vigil-gold-light)] transition-all"
             >
               <Plus className="w-4 h-4" />
               Log first evidence
             </button>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-12 text-[#6e6050]">
+          <div className="text-center py-12 text-[var(--text-muted)]">
             <p className="text-sm">No evidence matches your filters.</p>
           </div>
         ) : (
@@ -356,13 +356,13 @@ export default function EvidencePage() {
             {sortedDates.map(date => (
               <div key={date}>
                 <div className="flex items-center gap-3 mb-3">
-                  <Calendar className="w-3.5 h-3.5 text-[#6e6050]" />
-                  <span className="text-xs text-[#6e6050] font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+                  <span className="text-xs text-[var(--text-muted)] font-medium">
                     {new Date(date + 'T12:00:00').toLocaleDateString(undefined, {
                       weekday: 'long', month: 'long', day: 'numeric'
                     })}
                   </span>
-                  <div className="flex-1 h-px bg-[#2e2b25]" />
+                  <div className="flex-1 h-px bg-[var(--border-default)]" />
                 </div>
                 <div className="space-y-2">
                   <AnimatePresence>
@@ -373,23 +373,23 @@ export default function EvidencePage() {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="group flex items-start gap-3 p-4 bg-[#1e1c18] border border-[#2e2b25] rounded-xl hover:border-[#2e2b25]/80 transition-all"
+                        className="group flex items-start gap-3 p-4 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl hover:border-[var(--border-default)]/80 transition-all"
                       >
                         <div className={`flex items-center justify-center w-8 h-8 rounded-lg border shrink-0 ${TYPE_COLORS[item.type]}`}>
                           {TYPE_ICONS[item.type]}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-[#f0ebe0] leading-relaxed">{item.description}</p>
+                          <p className="text-sm text-[var(--text-primary)] leading-relaxed">{item.description}</p>
                           <div className="flex items-center gap-2 mt-2 flex-wrap">
                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${SIGNIFICANCE_COLORS[item.significance_level]}`}>
                               {item.significance_level}
                             </span>
                             {item.module_source && (
-                              <span className="text-[10px] text-[#6e6050] px-2 py-0.5 bg-[#272420] rounded-full">
+                              <span className="text-[10px] text-[var(--text-muted)] px-2 py-0.5 bg-[var(--bg-elevated)] rounded-full">
                                 Module {item.module_source}
                               </span>
                             )}
-                            <span className="text-[10px] text-[#6e6050]">
+                            <span className="text-[10px] text-[var(--text-muted)]">
                               {EVIDENCE_TYPE_LABELS[item.type]}
                             </span>
                           </div>
@@ -397,7 +397,7 @@ export default function EvidencePage() {
                         <button
                           onClick={() => handleDelete(item.id)}
                           disabled={deleteId === item.id}
-                          className="opacity-0 group-hover:opacity-100 p-1.5 text-[#6e6050] hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all shrink-0"
+                          className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--text-muted)] hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all shrink-0"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -412,9 +412,9 @@ export default function EvidencePage() {
 
         {/* Pattern hint */}
         {evidence.length >= 5 && (
-          <div className="mt-6 p-4 bg-[#c9a84c]/5 border border-[#c9a84c]/15 rounded-xl">
-            <p className="text-xs text-[#b8a98a]">
-              <span className="text-[#c9a84c] font-medium">Pattern analysis tip:</span>{' '}
+          <div className="mt-6 p-4 bg-[var(--vigil-gold)]/5 border border-[var(--vigil-gold)]/15 rounded-xl">
+            <p className="text-xs text-[var(--text-secondary)]">
+              <span className="text-[var(--vigil-gold)] font-medium">Pattern analysis tip:</span>{' '}
               Share your evidence log with Vigil in the chat for a full pattern analysis across your {evidence.length} logged items.
             </p>
           </div>

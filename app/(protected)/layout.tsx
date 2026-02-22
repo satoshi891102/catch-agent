@@ -15,7 +15,7 @@ export default async function ProtectedLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex flex-col">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col">
       <ProtectedNav userId={user.id} />
       <main className="flex-1">
         {children}

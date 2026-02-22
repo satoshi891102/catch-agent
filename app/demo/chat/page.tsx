@@ -460,6 +460,31 @@ export default function DemoChatPage() {
         <div ref={bottomRef} />
       </div>
 
+      {/* Suggestion chips — show when few messages and not typing */}
+      {!isTyping && !hitPaywall && messages.length <= 3 && messages.length > 0 && (
+        <div className="shrink-0 px-4 py-2 flex flex-wrap gap-2">
+          {(messageCount === 0 ? [
+            'My partner changed their phone password recently',
+            'They\'ve been coming home late from work',
+            'I found charges I don\'t recognize',
+            'They\'re being defensive when I ask questions',
+          ] : messageCount <= 2 ? [
+            'It started about 2-3 weeks ago',
+            'We\'ve been together for 5 years',
+            'There are other things I\'ve noticed too',
+            'Am I overreacting?',
+          ] : []).map((suggestion, i) => (
+            <button
+              key={i}
+              onClick={() => { setInput(suggestion); inputRef.current?.focus() }}
+              className="text-xs px-3 py-1.5 rounded-full bg-[var(--vigil-gold)]/[0.06] border border-[var(--vigil-gold)]/15 text-[var(--text-secondary)] hover:bg-[var(--vigil-gold)]/10 hover:text-[var(--vigil-gold)] transition-all"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Input */}
       <div className="shrink-0 px-4 py-3 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
         {hitPaywall ? (

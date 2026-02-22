@@ -52,7 +52,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className={`w-[400px] h-[400px] rounded-full bg-gradient-radial ${screen.accent} blur-[100px] opacity-50`} />
+        <div className={`w-[400px] h-[400px] rounded-full bg-gradient-to-br ${screen.accent} blur-[100px] opacity-50`} />
       </div>
 
       {/* Skip */}

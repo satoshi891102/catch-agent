@@ -113,7 +113,7 @@ export default function PricingPage() {
 
         {/* Back link */}
         <Link
-          href="/dashboard"
+          href="/demo"
           className="inline-flex items-center gap-2 text-sm text-[#6e6050] hover:text-[#b8a98a] mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function PricingPage() {
         <div className="max-w-lg mx-auto text-center mb-10">
           <p className="text-sm text-[#6e6050]">
             Not ready? You still have free messages available.{' '}
-            <Link href="/chat" className="text-[#c9a84c] hover:text-[#e0c070]">
+            <Link href="/demo/chat" className="text-[#c9a84c] hover:text-[#e0c070]">
               Continue for free →
             </Link>
           </p>
@@ -261,7 +261,7 @@ export default function PricingPage() {
         </div>
 
         <p className="text-center text-xs text-[#6e6050] mt-8 max-w-md mx-auto">
-          By subscribing, you agree to our Terms of Service. Vigil provides guidance only — not legal, medical, or professional investigative advice. Users are responsible for compliance with local laws.
+          By subscribing, you agree to our <Link href="/terms" className="text-[#c9a84c] hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-[#c9a84c] hover:underline">Privacy Policy</Link>. Vigil provides guidance only — not legal, medical, or professional investigative advice.
         </p>
       </div>
     </div>

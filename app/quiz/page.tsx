@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Eye, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Eye, ArrowRight, ArrowLeft, CheckCircle, Share2 } from 'lucide-react'
 
 const questions = [
   {
@@ -176,6 +176,20 @@ export default function QuizPage() {
             Start Full Investigation — Free
             <ArrowRight className="w-5 h-5" />
           </Link>
+
+          <button
+            onClick={async () => {
+              const text = `My quick assessment result: ${result.level}\n${yesCount} indicators identified.\n\nTake the assessment: https://catch-agent.vercel.app/quiz`
+              if (navigator.share) {
+                try { await navigator.share({ title: 'My Vigil Assessment', text, url: 'https://catch-agent.vercel.app/quiz' }) } catch {}
+              } else {
+                await navigator.clipboard.writeText(text)
+              }
+            }}
+            className="btn-ghost flex items-center justify-center gap-2 py-3 text-sm w-full mb-3"
+          >
+            <Share2 className="w-4 h-4" /> Share Result
+          </button>
 
           <div className="flex items-center justify-center gap-4 text-xs text-[var(--text-muted)]">
             {['10 free messages', 'No credit card', '100% private'].map(item => (

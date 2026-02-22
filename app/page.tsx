@@ -56,7 +56,7 @@ export default function LandingPage() {
             Vigil is an AI relationship investigator that helps you find the truth — methodically, legally, and without anyone else knowing.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link href="/demo/chat" className="btn-gold flex items-center gap-2 px-8 py-4 text-base w-full sm:w-auto justify-center">
               Start your investigation
               <ArrowRight className="w-4 h-4" />
@@ -64,6 +64,12 @@ export default function LandingPage() {
             <Link href="#how-it-works" className="btn-ghost flex items-center gap-2 px-6 py-4 w-full sm:w-auto justify-center">
               See how it works
               <ChevronDown className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="mb-14">
+            <Link href="/quiz" className="text-sm text-[var(--text-muted)] hover:text-[var(--vigil-gold)] transition-colors underline underline-offset-4 decoration-[var(--border-subtle)]">
+              Not sure? Take the 2-minute assessment →
             </Link>
           </div>
 

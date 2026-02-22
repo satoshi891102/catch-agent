@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import {
   FileText, Plus, ChevronRight, AlertTriangle, Calendar,
@@ -16,11 +17,11 @@ import {
 import type { EvidenceItem, EvidenceType, SignificanceLevel } from '@/lib/types'
 
 const typeConfig: Record<string, { color: string; bg: string; label: string }> = {
-  digital: { color: 'text-blue-400', bg: 'bg-blue-400/10', label: 'Digital' },
-  schedule: { color: 'text-purple-400', bg: 'bg-purple-400/10', label: 'Schedule' },
-  financial: { color: 'text-emerald-400', bg: 'bg-emerald-400/10', label: 'Financial' },
-  communication: { color: 'text-amber-400', bg: 'bg-amber-400/10', label: 'Communication' },
-  behavioral: { color: 'text-pink-400', bg: 'bg-pink-400/10', label: 'Behavioral' },
+  digital: { color: 'text-blue-400', bg: 'bg-blue-400/8', label: 'Digital' },
+  schedule: { color: 'text-purple-400', bg: 'bg-purple-400/8', label: 'Schedule' },
+  financial: { color: 'text-emerald-400', bg: 'bg-emerald-400/8', label: 'Financial' },
+  communication: { color: 'text-amber-400', bg: 'bg-amber-400/8', label: 'Communication' },
+  behavioral: { color: 'text-pink-400', bg: 'bg-pink-400/8', label: 'Behavioral' },
 }
 
 const sigConfig: Record<string, { color: string; label: string }> = {
@@ -67,7 +68,9 @@ export default function DemoEvidencePage() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[var(--vigil-gold)]/30 border-t-[var(--vigil-gold)] rounded-full animate-spin" />
+        <div className="w-10 h-10 rounded-full bg-[var(--vigil-gold)]/8 border border-[var(--vigil-gold)]/15 flex items-center justify-center">
+          <Eye className="w-5 h-5 text-[var(--vigil-gold)] animate-pulse" />
+        </div>
       </div>
     )
   }
@@ -94,18 +97,23 @@ export default function DemoEvidencePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pt-6 md:pt-8 pb-24">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-2xl mx-auto px-5 pt-6 md:pt-8 pb-24"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-xl font-bold text-[var(--text-primary)]">Evidence Log</h1>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-[13px] text-[var(--text-muted)] mt-1">
             {evidence.length} item{evidence.length !== 1 ? 's' : ''} documented
           </p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="btn-gold flex items-center gap-1.5 px-4 py-2 text-sm"
+          className="btn-gold flex items-center gap-1.5 px-4 py-2.5 text-[13px]"
         >
           <Plus className="w-3.5 h-3.5" />
           Add Evidence
@@ -276,6 +284,6 @@ export default function DemoEvidencePage() {
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   )
 }

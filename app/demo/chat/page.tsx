@@ -15,6 +15,7 @@ import {
   updateCaseFromState,
   resetDemoData,
 } from '@/lib/demo-store'
+import { getFallbackResponse } from '@/lib/fallback-responses'
 import type { ChatMessage, EvidenceType, SignificanceLevel } from '@/lib/types'
 import { FREE_MESSAGE_LIMIT } from '@/lib/types'
 
@@ -245,8 +246,12 @@ export default function DemoChatPage() {
       } else if (response.status === 429) {
         replyContent = "I need a moment to collect my thoughts. Could you give me a minute before sending another message? I want to give you my full attention."
       } else {
-        // Fallback response for other errors
-        replyContent = "I'm having a brief connection issue, but I'm still here. Could you try sending that again in a moment?"
+        // Smart fallback — contextual response based on user's message
+        replyContent = getFallbackResponse({
+          userMessage: input.trim(),
+          messageCount: newCount,
+          conversationLength: updatedMessages.length,
+        })
       }
 
       const aiMsg: ChatMessage = {
@@ -268,9 +273,15 @@ export default function DemoChatPage() {
       autoExtractEvidence(userMsg.content)
 
     } catch {
+      // Network error — use smart fallback
+      const fallback = getFallbackResponse({
+        userMessage: userMsg.content,
+        messageCount: newCount,
+        conversationLength: updatedMessages.length,
+      })
       const errorMsg: ChatMessage = {
         role: 'assistant',
-        content: "I'm having trouble connecting right now, but I'm still here. Could you try sending that again?",
+        content: fallback,
         timestamp: new Date().toISOString(),
       }
       setMessages(prev => [...prev, errorMsg])

@@ -33,7 +33,7 @@ export default function LandingPage() {
           <Link href="/login" className="btn-ghost text-sm px-3 py-1.5">
             Sign in
           </Link>
-          <Link href="/signup" className="btn-gold text-sm px-5 py-2">
+          <Link href="/demo/chat" className="btn-gold text-sm px-5 py-2">
             Start free
           </Link>
         </div>
@@ -57,7 +57,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-            <Link href="/signup" className="btn-gold flex items-center gap-2 px-8 py-4 text-base w-full sm:w-auto justify-center">
+            <Link href="/demo/chat" className="btn-gold flex items-center gap-2 px-8 py-4 text-base w-full sm:w-auto justify-center">
               Start your investigation
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -253,7 +253,7 @@ export default function LandingPage() {
               <div className="flex-1 bg-[var(--bg-primary)] rounded-full px-4 py-2.5 text-sm text-[var(--text-muted)] border border-[var(--border-subtle)]">
                 Tell Vigil what you&apos;ve noticed...
               </div>
-              <Link href="/signup" className="btn-gold px-5 py-2.5 text-sm">
+              <Link href="/demo/chat" className="btn-gold px-5 py-2.5 text-sm">
                 Try free
               </Link>
             </div>
@@ -343,7 +343,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/signup" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
+              <Link href="/demo/chat" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
                 Get started
               </Link>
             </div>
@@ -367,7 +367,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/signup" className="btn-gold text-center py-3 text-sm">
+              <Link href="/demo/chat" className="btn-gold text-center py-3 text-sm">
                 Get started
               </Link>
             </div>
@@ -388,7 +388,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/signup" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
+              <Link href="/demo/chat" className="text-center py-3 rounded-xl text-sm font-medium bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--border-strong)] transition-all">
                 Get started
               </Link>
             </div>
@@ -524,7 +524,7 @@ export default function LandingPage() {
           <p className="text-[var(--text-secondary)] mb-10 text-lg leading-relaxed">
             Start your investigation free — no credit card, no commitment. Just answers.
           </p>
-          <Link href="/signup" className="btn-gold inline-flex items-center gap-2 px-10 py-4 text-lg">
+          <Link href="/demo/chat" className="btn-gold inline-flex items-center gap-2 px-10 py-4 text-lg">
             Start your investigation
             <ArrowRight className="w-5 h-5" />
           </Link>

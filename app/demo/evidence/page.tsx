@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   FileText, Plus, ChevronRight, AlertTriangle, Calendar,
-  BarChart3, Trash2, Eye
+  BarChart3, Trash2, Eye, MessageSquare
 } from 'lucide-react'
 import {
   getDemoEvidence,
@@ -254,6 +254,14 @@ export default function DemoEvidencePage() {
                   <p className="text-sm text-[var(--text-primary)] leading-relaxed">
                     {item.description}
                   </p>
+                  <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Link
+                      href={`/demo/chat`}
+                      className="text-[10px] text-[var(--vigil-gold)] hover:text-[var(--vigil-gold-light)] flex items-center gap-1"
+                    >
+                      <MessageSquare className="w-3 h-3" /> Discuss with Vigil
+                    </Link>
+                  </div>
                 </div>
               )
             })}

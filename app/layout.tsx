@@ -58,6 +58,36 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${instrumentSerif.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'Vigil',
+              applicationCategory: 'LifestyleApplication',
+              description: 'AI-powered relationship investigator that helps you find the truth about suspected infidelity — methodically, legally, and privately.',
+              offers: [
+                {
+                  '@type': 'Offer',
+                  price: '9.99',
+                  priceCurrency: 'USD',
+                  description: 'Weekly plan — unlimited conversations and all investigation modules',
+                },
+                {
+                  '@type': 'Offer',
+                  price: '29.99',
+                  priceCurrency: 'USD',
+                  description: 'Monthly plan — full access including confrontation toolkit',
+                },
+              ],
+              operatingSystem: 'Web',
+              url: 'https://catch-agent.vercel.app',
+            }),
+          }}
+        />
+      </head>
       <body className="font-sans antialiased min-h-screen">
         {children}
       </body>

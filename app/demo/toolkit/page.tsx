@@ -79,7 +79,7 @@ export default function ConfrontationToolkit() {
           </div>
 
           {/* Toolkit sections */}
-          {[
+          {([
             {
               icon: <MessageSquare className="w-5 h-5" />,
               title: 'What to Say',
@@ -115,6 +115,7 @@ export default function ConfrontationToolkit() {
               title: 'Emotional Preparation',
               desc: 'Managing your emotions during and after, regardless of the outcome',
               locked: false,
+              href: '/demo/toolkit/emotional',
             },
             {
               icon: <Users className="w-5 h-5" />,
@@ -127,8 +128,9 @@ export default function ConfrontationToolkit() {
               title: 'Crisis Resources',
               desc: 'Hotlines, support groups, and professional help if you need it',
               locked: false,
+              href: '/demo/toolkit/crisis',
             },
-          ].map((section, i) => (
+          ] as Array<{ icon: React.ReactNode; title: string; desc: string; locked: boolean; href?: string }>).map((section, i) => (
             <div key={i} className={`vigil-card p-4 flex items-center gap-4 ${section.locked ? 'opacity-60' : ''}`}>
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                 section.locked
@@ -146,7 +148,7 @@ export default function ConfrontationToolkit() {
                   Unlock
                 </Link>
               ) : (
-                <Link href="/demo/chat" className="text-xs text-[var(--vigil-gold)] font-medium shrink-0 flex items-center gap-0.5">
+                <Link href={section.href || '/demo/chat'} className="text-xs text-[var(--vigil-gold)] font-medium shrink-0 flex items-center gap-0.5">
                   Open <ChevronRight className="w-3 h-3" />
                 </Link>
               )}

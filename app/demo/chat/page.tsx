@@ -73,6 +73,57 @@ function TypingIndicator() {
   )
 }
 
+function CrisisBanner({ type, onDismiss }: { type: 'suicide' | 'dv' | 'harm'; onDismiss: () => void }) {
+  const resources = {
+    suicide: {
+      title: 'You matter. Help is available right now.',
+      lines: [
+        '988 Suicide & Crisis Lifeline — call or text 988 (US)',
+        'Crisis Text Line — text HOME to 741741',
+        'SADAG (South Africa) — 0800 567 567',
+        'International Association for Suicide Prevention — https://www.iasp.info/resources/Crisis_Centres/',
+      ],
+      color: 'red',
+    },
+    dv: {
+      title: 'Your safety comes first.',
+      lines: [
+        'National DV Hotline — 1-800-799-7233 (text START to 88788)',
+        'People Opposing Women Abuse (SA) — 011 642 4345',
+        'If you\'re in immediate danger, call emergency services.',
+      ],
+      color: 'orange',
+    },
+    harm: {
+      title: 'Let\'s pause here.',
+      lines: [
+        'Vigil helps you find the truth — not plan revenge or harm.',
+        'If you\'re feeling overwhelmed, talking to a professional can help.',
+        'BetterHelp / Talkspace offer immediate online therapy.',
+      ],
+      color: 'amber',
+    },
+  }
+
+  const r = resources[type]
+  const borderColor = type === 'suicide' ? 'border-red-500/30 bg-red-500/8' : type === 'dv' ? 'border-orange-500/30 bg-orange-500/8' : 'border-amber-500/30 bg-amber-500/8'
+  const titleColor = type === 'suicide' ? 'text-red-400' : type === 'dv' ? 'text-orange-400' : 'text-amber-400'
+
+  return (
+    <div className={`mx-2 p-4 border rounded-xl ${borderColor}`}>
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <p className={`text-sm font-semibold ${titleColor}`}>{r.title}</p>
+        <button onClick={onDismiss} className="text-[var(--text-muted)] text-xs shrink-0 hover:text-[var(--text-secondary)]">✕</button>
+      </div>
+      <ul className="space-y-1.5">
+        {r.lines.map((line, i) => (
+          <li key={i} className="text-xs text-[var(--text-secondary)] leading-relaxed">• {line}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function EvidencePrompt({ evidence, onAccept, onDismiss }: {
   evidence: { type: EvidenceType; description: string; significance_level: SignificanceLevel }
   onAccept: () => void
@@ -102,6 +153,7 @@ export default function DemoChatPage() {
     description: string
     significance_level: SignificanceLevel
   }>>([])
+  const [crisisBanner, setCrisisBanner] = useState<'suicide' | 'dv' | 'harm' | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -198,6 +250,9 @@ export default function DemoChatPage() {
       // Update case file based on new state
       updateCaseFromState()
 
+      // Check for crisis language
+      detectCrisis(userMsg.content)
+
       // Check for evidence-like content in user message
       autoExtractEvidence(userMsg.content)
 
@@ -215,54 +270,71 @@ export default function DemoChatPage() {
     }
   }, [input, isTyping, isPaid, messageCount, messages])
 
+  // Detect crisis language and show appropriate resources
+  const detectCrisis = (text: string) => {
+    const lower = text.toLowerCase()
+    if (/\b(kill\s*(my)?self|suicid|end\s*(it|my\s*life)|don'?t\s*want\s*to\s*(live|be\s*alive|exist)|rather\s*(be\s*dead|die)|no\s*reason\s*to\s*live)\b/i.test(lower)) {
+      setCrisisBanner('suicide')
+    } else if (/\b(hit(s|ting)?\s*me|beat(s|ing)?\s*me|afraid\s*(of|he|she)|threaten|choke|strangle|violent|abuse|hurt(s|ing)?\s*me|scared\s*(of|for\s*my\s*life))\b/i.test(lower)) {
+      setCrisisBanner('dv')
+    } else if (/\b(kill\s*(him|her|them)|hurt\s*(him|her|them)|revenge|destroy\s*(him|her|their\s*life)|make\s*(him|her|them)\s*(pay|suffer)|ruin)\b/i.test(lower)) {
+      setCrisisBanner('harm')
+    }
+  }
+
   // Auto-extract evidence from user messages
+  // Requires compound signals — not single generic keywords
   const autoExtractEvidence = (text: string) => {
     const lower = text.toLowerCase()
+    const words = lower.split(/\s+/).length
     const suggestions: Array<{ type: EvidenceType; description: string; significance_level: SignificanceLevel }> = []
 
-    // Phone/digital evidence
-    if (/phone|password|lock|app|social media|instagram|snapchat|tinder|bumble|hidden|deleted|notification/i.test(lower)) {
-      suggestions.push({
-        type: 'digital',
-        description: text.slice(0, 200),
-        significance_level: /password|tinder|bumble|hidden|deleted/.test(lower) ? 'high' : 'medium',
-      })
+    // Skip very short messages — not enough context
+    if (words < 8) return
+
+    // Digital evidence — require compound signals (action + subject)
+    const digitalHigh = /changed?.{0,20}password|new.{0,15}lock|tinder|bumble|hinge|grindr|hidden.{0,15}app|deleted?.{0,15}message|secret.{0,15}(app|folder|account)|vault.{0,10}app|calculator\+|face.?down|screen.{0,10}(tilt|away|hide)/i
+    const digitalMed = /(phone|device).{0,30}(never|always|won't let|doesn't let|protective|guarded)|(always|suddenly).{0,20}(face.?down|silent|airplane|bathroom)/i
+    if (digitalHigh.test(lower)) {
+      suggestions.push({ type: 'digital', description: text.slice(0, 200), significance_level: 'high' })
+    } else if (digitalMed.test(lower)) {
+      suggestions.push({ type: 'digital', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Schedule evidence
-    if (/late|overtime|work trip|meeting|gym|schedule|tuesday|thursday|weekend|absent|gone/i.test(lower)) {
-      suggestions.push({
-        type: 'schedule',
-        description: text.slice(0, 200),
-        significance_level: /every|always|never before|suddenly/.test(lower) ? 'high' : 'medium',
-      })
+    // Schedule evidence — require pattern language, not just days of week
+    const scheduleHigh = /(suddenly|recently|started|never.{0,10}before|didn't.{0,10}use.?to).{0,30}(overtime|late|work trip|business trip|gone|disappear|absent)/i
+    const scheduleMed = /(unaccounted|can't.{0,10}explain|doesn't add up|story.{0,15}(change|different|match)|where.{0,15}(was|were|been))/i
+    if (scheduleHigh.test(lower)) {
+      suggestions.push({ type: 'schedule', description: text.slice(0, 200), significance_level: 'high' })
+    } else if (scheduleMed.test(lower)) {
+      suggestions.push({ type: 'schedule', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Financial evidence
-    if (/charge|credit card|bank|withdrawal|cash|restaurant|hotel|receipt|purchase|subscription|venmo/i.test(lower)) {
-      suggestions.push({
-        type: 'financial',
-        description: text.slice(0, 200),
-        significance_level: /hotel|unknown|unexplained|didn.t recognize/.test(lower) ? 'critical' : 'high',
-      })
+    // Financial evidence — require suspicious context, not just "credit card"
+    const financialCritical = /hotel.{0,30}(charge|receipt|bill|reservation)|unknown.{0,20}(charge|transaction|withdrawal)|unexplained.{0,20}(expense|charge|purchase)|restaurant.{0,20}(didn't|never|wasn't)/i
+    const financialHigh = /(secret|hidden|separate|new).{0,20}(account|credit.?card|bank)|cash.{0,20}(only|withdrawal|atm).{0,30}(unexplained|unusual|sudden)|venmo.{0,20}(unknown|don't.{0,10}know)/i
+    if (financialCritical.test(lower)) {
+      suggestions.push({ type: 'financial', description: text.slice(0, 200), significance_level: 'critical' })
+    } else if (financialHigh.test(lower)) {
+      suggestions.push({ type: 'financial', description: text.slice(0, 200), significance_level: 'high' })
     }
 
-    // Communication evidence
-    if (/text|call|whisper|hang up|leave room|contact|dm|message|deleted/i.test(lower)) {
-      suggestions.push({
-        type: 'communication',
-        description: text.slice(0, 200),
-        significance_level: /whisper|deleted|secret|hidden/.test(lower) ? 'high' : 'medium',
-      })
+    // Communication evidence — require suspicious context
+    const commHigh = /(whisper|leave.{0,10}room|hang.{0,5}up|step.{0,10}(outside|away)).{0,30}(call|phone|text)|(deleted?|erased?|cleared?).{0,20}(text|message|chat|thread|conversation|history)|second.{0,10}(phone|sim|device)/i
+    const commMed = /(constant|always|excessive).{0,20}(text|message|dm|chat).{0,30}(stop|hide|when i)|(new|unfamiliar|generic).{0,20}(contact|name|number)/i
+    if (commHigh.test(lower)) {
+      suggestions.push({ type: 'communication', description: text.slice(0, 200), significance_level: 'high' })
+    } else if (commMed.test(lower)) {
+      suggestions.push({ type: 'communication', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
-    // Behavioral evidence
-    if (/gift|flower|guilt|defensive|angry|shower|cologne|perfume|gym|appearance|weight|clothes/i.test(lower)) {
-      suggestions.push({
-        type: 'behavioral',
-        description: text.slice(0, 200),
-        significance_level: /guilt|defensive|angry|gaslight/.test(lower) ? 'high' : 'medium',
-      })
+    // Behavioral evidence — require change/pattern language
+    const behavioralHigh = /(gaslight|guilt.{0,10}(trip|gift)|over.?compensat|accus.{0,10}(me|snooping)|turn.{0,10}(it|things).{0,10}(around|on me))/i
+    const behavioralMed = /(suddenly|recently|started|never.{0,10}before).{0,30}(gym|cologne|perfume|clothes|grooming|appearance|weight|shower)|new.{0,20}(interest|music|show|restaurant).{0,30}(never|didn't|don't)/i
+    if (behavioralHigh.test(lower)) {
+      suggestions.push({ type: 'behavioral', description: text.slice(0, 200), significance_level: 'high' })
+    } else if (behavioralMed.test(lower)) {
+      suggestions.push({ type: 'behavioral', description: text.slice(0, 200), significance_level: 'medium' })
     }
 
     // Only show one suggestion at a time (the highest priority)
@@ -344,6 +416,11 @@ export default function DemoChatPage() {
         ))}
 
         {isTyping && <TypingIndicator />}
+
+        {/* Crisis banner */}
+        {crisisBanner && (
+          <CrisisBanner type={crisisBanner} onDismiss={() => setCrisisBanner(null)} />
+        )}
 
         {/* Evidence prompts */}
         {pendingEvidence.map((evidence, i) => (

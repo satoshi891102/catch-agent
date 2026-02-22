@@ -4,8 +4,8 @@ import { Eye, MessageSquare, LayoutDashboard, FileText, CreditCard, LogOut, Shie
 export default function DemoLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col">
-      {/* Mobile top bar */}
-      <nav className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)]">
+      {/* Mobile top bar — hidden on chat page (chat has own header) */}
+      <nav className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--bg-primary)] border-b border-[var(--border-subtle)]">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-[var(--vigil-gold)]/10 border border-[var(--vigil-gold)]/30 flex items-center justify-center">
             <Eye className="w-3.5 h-3.5 text-[var(--vigil-gold)]" />
@@ -80,7 +80,7 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
         </div>
       </aside>
 
-      <main className="flex-1 md:pl-56 pt-14 md:pt-0 pb-20 md:pb-0">
+      <main className="flex-1 md:pl-56 pb-20 md:pb-0">
         {children}
       </main>
     </div>
